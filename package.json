@@ -1,0 +1,15 @@
+{
+  "name": "voicecoder",
+  "version": "1.0.0",
+  "description": "Talk into your code editor. Natural language → real code at your cursor.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.js",
+    "watch": "node scripts/build.js --watch",
+    "zip": "node scripts/build.js && node scripts/zip.js"
+  },
+  "devDependencies": {
+    "archiver": "^6.0.1"
+  }
+}

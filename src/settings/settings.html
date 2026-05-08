@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>VoiceCoder — Settings</title>
+  <link rel="stylesheet" href="settings.css" />
+</head>
+<body>
+  <div class="page">
+    <header class="page-header">
+      <h1>VoiceCoder <span>Settings</span></h1>
+    </header>
+
+    <main>
+      <!-- API Keys -->
+      <section class="card">
+        <h2>OpenAI API Key</h2>
+        <p class="desc">
+          Required for code generation. Your key is stored locally and never sent anywhere except OpenAI.
+          <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener">Get a key →</a>
+        </p>
+        <div class="input-row">
+          <input
+            type="password"
+            id="apiKeyInput"
+            placeholder="sk-..."
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <button id="saveApiKey" class="btn btn-primary">Save</button>
+        </div>
+        <div class="feedback" id="apiKeyFeedback"></div>
+      </section>
+
+      <!-- Model -->
+      <section class="card">
+        <h2>Model</h2>
+        <p class="desc">GPT-4.1 is recommended for best code quality and speed.</p>
+        <select id="modelSelect">
+          <option value="gpt-4.1">GPT-4.1 (recommended)</option>
+          <option value="gpt-4.1-mini">GPT-4.1 Mini (faster, cheaper)</option>
+          <option value="gpt-4o">GPT-4o</option>
+          <option value="gpt-4o-mini">GPT-4o Mini</option>
+        </select>
+      </section>
+
+      <!-- Speech -->
+      <section class="card">
+        <h2>Speech Recognition</h2>
+        <p class="desc">Language for voice input recognition (not programming language).</p>
+        <select id="speechLangSelect">
+          <option value="en-US">English (US)</option>
+          <option value="en-GB">English (UK)</option>
+          <option value="en-IN">English (India)</option>
+          <option value="en-AU">English (Australia)</option>
+        </select>
+      </section>
+
+      <!-- Shortcut reminder -->
+      <section class="card">
+        <h2>Keyboard Shortcuts</h2>
+        <table class="shortcut-table">
+          <tr><td>Toggle listening</td><td><kbd>⌥ Space</kbd></td></tr>
+          <tr><td>Switch language</td><td><kbd>⌥ L</kbd></td></tr>
+          <tr><td>Undo last insertion</td><td><kbd>⌥ Z</kbd></td></tr>
+        </table>
+        <p class="desc" style="margin-top:10px">
+          Change shortcuts at
+          <code>chrome://extensions/shortcuts</code>
+        </p>
+      </section>
+
+      <!-- Danger zone -->
+      <section class="card danger-card">
+        <h2>Reset</h2>
+        <p class="desc">Clear all stored data including API key.</p>
+        <button id="resetBtn" class="btn btn-danger">Clear All Data</button>
+      </section>
+    </main>
+  </div>
+  <script src="settings.js" type="module"></script>
+</body>
+</html>

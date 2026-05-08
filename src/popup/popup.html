@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VoiceCoder</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <div class="logo">
+        <div class="logo-dot" id="statusDot"></div>
+        <span class="logo-text">VoiceCoder</span>
+      </div>
+      <button class="settings-btn" id="settingsBtn" title="Settings">⚙</button>
+    </div>
+
+    <!-- No API Key Warning -->
+    <div class="warning" id="apiKeyWarning" style="display:none">
+      <span>⚠ Add your OpenAI key in</span>
+      <button class="link-btn" id="openSettingsLink">Settings</button>
+    </div>
+
+    <!-- Main Toggle -->
+    <div class="toggle-section">
+      <button class="toggle-btn" id="toggleBtn" disabled>
+        <span class="toggle-icon" id="toggleIcon">🎙</span>
+        <span class="toggle-label" id="toggleLabel">Start Listening</span>
+        <kbd class="shortcut">⌥ Space</kbd>
+      </button>
+    </div>
+
+    <!-- Language Selector -->
+    <div class="lang-section">
+      <label class="section-label">Language</label>
+      <div class="lang-grid" id="langGrid">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+
+    <!-- Status -->
+    <div class="status-bar" id="statusBar">
+      Ready — focus any code editor and press ⌥ Space
+    </div>
+  </div>
+  <script src="popup.js" type="module"></script>
+</body>
+</html>
