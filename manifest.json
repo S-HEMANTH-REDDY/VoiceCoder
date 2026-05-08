@@ -45,6 +45,7 @@
       "css": [
         "src/content/content.css"
       ],
+      "type": "module",
       "run_at": "document_idle",
       "all_frames": false
     }

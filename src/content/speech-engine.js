@@ -47,12 +47,14 @@ export class SpeechEngine {
       }
 
       if (interimTranscript) {
+        console.log('[VoiceCoder] Interim:', interimTranscript);
         this._currentTranscript = interimTranscript;
         this.onInterim(interimTranscript);
         this._resetSilenceTimer();
       }
 
       if (finalTranscript.trim()) {
+        console.log('[VoiceCoder] Final:', finalTranscript.trim());
         this._clearSilenceTimer();
         this._currentTranscript = '';
         this.onFinal(finalTranscript.trim());
@@ -60,7 +62,7 @@ export class SpeechEngine {
     };
 
     this.recognition.onerror = (event) => {
-      // Ignore no-speech errors (user just paused)
+      console.error('[VoiceCoder] Speech error:', event.error);
       if (event.error === 'no-speech') return;
       this.onError(event.error);
     };

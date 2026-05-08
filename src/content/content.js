@@ -76,6 +76,7 @@ function startListening() {
     },
     async onFinal(transcript) {
       if (!transcript.trim()) return;
+      console.log('[VoiceCoder] onFinal fired:', transcript);
       setIndicatorState('generating', transcript);
 
       try {
@@ -90,6 +91,7 @@ function startListening() {
             : { type: MSG.REQUEST_GENERATION, data: { transcript, context } }
         );
 
+        console.log('[VoiceCoder] LLM response:', response);
         if (response.ok && response.code) {
           // Restore editor focus before injecting — it may have been lost
           // when the popup closed or when Alt+Space briefly shifted focus.
