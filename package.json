@@ -10,6 +10,7 @@
     "zip": "node scripts/build.js && node scripts/zip.js"
   },
   "devDependencies": {
-    "archiver": "^6.0.1"
+    "archiver": "^6.0.1",
+    "esbuild": "^0.28.0"
   }
 }
