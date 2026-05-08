@@ -12,6 +12,7 @@ let currentLanguage = 'python';
 let lastInsertedCode = null;
 let lastInsertedRange = null;
 let isListening = false;
+let savedFocusTarget = null;
 
 // ── Message Router ─────────────────────────────────────────────────────────────
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
@@ -52,11 +53,22 @@ function isRewriteIntent(transcript) {
 }
 
 // ── Listening Lifecycle ────────────────────────────────────────────────────────
+function restoreEditorFocus() {
+  if (savedFocusTarget && document.contains(savedFocusTarget)) {
+    savedFocusTarget.focus();
+  }
+}
+
 function startListening() {
   if (isListening) return;
   isListening = true;
+
+  // Save whatever had focus before the indicator appears (likely the editor).
+  // The popup closing can briefly steal focus — we restore it after 150ms.
+  savedFocusTarget = document.activeElement;
   createIndicator();
   setIndicatorState('listening');
+  setTimeout(restoreEditorFocus, 150);
 
   speechEngine = new SpeechEngine({
     onInterim(transcript) {
@@ -79,6 +91,9 @@ function startListening() {
         );
 
         if (response.ok && response.code) {
+          // Restore editor focus before injecting — it may have been lost
+          // when the popup closed or when Alt+Space briefly shifted focus.
+          restoreEditorFocus();
           const ok = useRewrite
             ? replaceEditorSelection(editorType, response.code)
             : injectCode(response.code);
@@ -111,6 +126,8 @@ function startListening() {
 function stopListening() {
   if (!isListening) return;
   isListening = false;
+  // Flush any buffered interim transcript so the last command isn't lost.
+  speechEngine?.flush();
   speechEngine?.stop();
   speechEngine = null;
   removeIndicator();

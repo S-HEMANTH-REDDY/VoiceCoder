@@ -272,6 +272,7 @@ function insertIntoMonaco(code) {
   const editor = getMonacoEditor();
   if (!editor) return false;
 
+  editor.focus();
   const position = editor.getPosition();
   if (!position) return false;
 
@@ -374,13 +375,14 @@ function insertIntoContentEditable(code) {
 }
 
 // Simulate native input events for editors that rely on browser input events (CM6)
+// Must target the CM6 element directly — dispatching to document.activeElement fails
+// if the editor lost focus (e.g. after the popup closed).
 function insertViaNativeInput(text) {
-  const el = document.activeElement;
+  const el = document.querySelector('.cm-content') || document.activeElement;
   if (!el) return false;
 
   el.focus();
 
-  // Dispatch as if the user typed it — works with CM6's event-based model
   const inputEvent = new InputEvent('beforeinput', {
     bubbles: true,
     cancelable: true,
@@ -390,6 +392,7 @@ function insertViaNativeInput(text) {
   el.dispatchEvent(inputEvent);
 
   if (!inputEvent.defaultPrevented) {
+    el.focus();
     document.execCommand('insertText', false, text);
   }
 

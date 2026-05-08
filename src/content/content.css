@@ -2,7 +2,7 @@
 
 #voicecoder-indicator {
   position: fixed;
-  bottom: 20px;
+  top: 20px;
   right: 20px;
   z-index: 2147483647;
   display: flex;
@@ -24,7 +24,7 @@
     opacity 0.18s ease,
     transform 0.18s ease;
   user-select: none;
-  pointer-events: auto;
+  pointer-events: none;
   max-width: 340px;
 }
 
@@ -73,6 +73,7 @@
   line-height: 1;
   transition: color 0.15s ease;
   flex-shrink: 0;
+  pointer-events: auto;
 }
 
 .vc-close:hover {

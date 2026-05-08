@@ -92,6 +92,15 @@ export class SpeechEngine {
     this.recognition = null;
   }
 
+  // Fire onFinal immediately with any buffered interim transcript.
+  // Call this before stop() so the pending speech isn't lost.
+  flush() {
+    this._clearSilenceTimer();
+    const t = this._currentTranscript.trim();
+    this._currentTranscript = '';
+    if (t) this.onFinal(t);
+  }
+
   _resetSilenceTimer() {
     this._clearSilenceTimer();
     // If 1.5s passes with only interim results, treat it as final
