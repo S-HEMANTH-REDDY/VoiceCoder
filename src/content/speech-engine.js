@@ -63,7 +63,18 @@ export class SpeechEngine {
 
     this.recognition.onerror = (event) => {
       console.error('[VoiceCoder] Speech error:', event.error);
-      if (event.error === 'no-speech') return;
+      if (event.error === 'no-speech') {
+        this._noSpeechCount = (this._noSpeechCount || 0) + 1;
+        if (this._noSpeechCount >= 2) {
+          this._noSpeechCount = 0;
+          this.onError('No speech detected — check mic permissions in System Settings → Privacy → Microphone');
+        }
+        return;
+      }
+      if (event.error === 'not-allowed') {
+        this.onError('Microphone blocked — click the lock icon in the address bar and allow microphone');
+        return;
+      }
       this.onError(event.error);
     };
 
