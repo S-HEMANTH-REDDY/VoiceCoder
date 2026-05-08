@@ -14,6 +14,12 @@ const state = {
 };
 
 // ── Boot ───────────────────────────────────────────────────────────────────────
+// Keep a promise so message handlers can await init before reading state.
+// The service worker is killed after ~30s idle in MV3; when Chrome wakes it
+// to handle a message, initialize() is async — without this, state.apiKey is
+// still null when the first message arrives.
+let initPromise;
+
 async function initialize() {
   const stored = await chrome.storage.local.get([
     STORAGE_KEYS.API_KEY,
@@ -25,7 +31,7 @@ async function initialize() {
   if (stored[STORAGE_KEYS.SETTINGS]?.model) state.model = stored[STORAGE_KEYS.SETTINGS].model;
 }
 
-initialize();
+initPromise = initialize();
 
 // ── Keyboard Commands ──────────────────────────────────────────────────────────
 chrome.commands.onCommand.addListener(async (command) => {
@@ -48,6 +54,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 });
 
 async function handleMessage(message, sender, sendResponse) {
+  await initPromise; // wait for storage load before reading state.apiKey
   switch (message.type) {
     case MSG.GET_STATE: {
       sendResponse({

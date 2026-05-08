@@ -105,13 +105,14 @@ function startListening() {
             setTimeout(() => setIndicatorState('listening'), 2000);
           }
         } else {
-          setIndicatorState('error', response.error || 'Generation failed');
-          setTimeout(() => setIndicatorState('listening'), 2500);
+          console.error('[VoiceCoder] Generation failed:', response?.error);
+          setIndicatorState('error', response?.error || 'Generation failed');
+          setTimeout(() => setIndicatorState('listening'), 4000);
         }
       } catch (err) {
         console.error('[VoiceCoder] Error:', err);
         setIndicatorState('error', err.message);
-        setTimeout(() => setIndicatorState('listening'), 2500);
+        setTimeout(() => setIndicatorState('listening'), 4000);
       }
     },
     onError(err) {
