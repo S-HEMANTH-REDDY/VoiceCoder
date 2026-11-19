@@ -1,0 +1,10 @@
+{
+  "what": "handleUtterance() for local navigation commands in a real VS Code instance (transcript in → cursor moved)",
+  "n": 60,
+  "p50": 0.54,
+  "p95": 0.84,
+  "max": 1.21,
+  "vscode": "1.145.2",
+  "platform": "darwin-arm64",
+  "date": "2026-11-19T09:37:25.926Z"
+}

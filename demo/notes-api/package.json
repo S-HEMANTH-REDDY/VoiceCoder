@@ -1,0 +1,11 @@
+{
+  "name": "notes-api",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A tiny dependency-free notes API used to demo VoiceCoder end to end.",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test"
+  }
+}

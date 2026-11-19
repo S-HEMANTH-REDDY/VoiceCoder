@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>VoiceCoder — Settings</title>
+  <link rel="stylesheet" href="settings.css" />
+</head>
+<body>
+  <div class="page">
+    <header class="page-header">
+      <h1>VoiceCoder <span>Settings</span></h1>
+    </header>
+    <main>
+      <section class="card">
+        <h2>Model provider</h2>
+        <p class="desc">VoiceCoder understands open-ended requests and writes code with your own key (BYOK). Keys are stored in this extension's local storage. Only the background worker reads them, and it sends them only to the provider's API.</p>
+        <select id="provider">
+          <option value="anthropic">Anthropic Claude</option>
+          <option value="openai">OpenAI</option>
+        </select>
+        <div class="input-row" style="margin-top:12px">
+          <input type="password" id="apiKey" placeholder="Paste API key" autocomplete="off" spellcheck="false" aria-label="API key" />
+          <button id="saveKey" class="btn btn-primary">Save key</button>
+        </div>
+        <div class="feedback" id="keyFeedback" role="status"></div>
+        <p class="desc" id="keyStatus"></p>
+      </section>
+
+      <section class="card">
+        <h2>Model</h2>
+        <p class="desc">Leave empty for the provider default (<code>claude-opus-5-5</code> or <code>gpt-4.1</code>).</p>
+        <input type="text" id="model" placeholder="Provider default" spellcheck="false" aria-label="Model id" />
+      </section>
+
+      <section class="card">
+        <h2>Speech</h2>
+        <p class="desc">Recognition language and listening mode. Hindi and Telugu depend on Chrome's speech service.</p>
+        <select id="speechLang" aria-label="Speech language">
+          <option value="en-US">English (US)</option>
+          <option value="en-GB">English (UK)</option>
+          <option value="en-IN">English (India)</option>
+          <option value="hi-IN">हिन्दी · Hindi</option>
+          <option value="te-IN">తెలుగు · Telugu</option>
+        </select>
+        <select id="mode" aria-label="Listening mode" style="margin-top:8px">
+          <option value="continuous">Continuous — each pause ends a command</option>
+          <option value="push-to-talk">Push-to-talk — toggle the shortcut to send</option>
+        </select>
+      </section>
+
+      <section class="card">
+        <h2>Keyboard shortcuts</h2>
+        <table class="shortcut-table">
+          <tr><td>Toggle listening</td><td><kbd>⌥ Space</kbd></td></tr>
+          <tr><td>Undo last VoiceCoder change</td><td><kbd>⌥ Z</kbd></td></tr>
+        </table>
+        <p class="desc" style="margin-top:10px">Change shortcuts at <code>chrome://extensions/shortcuts</code>.</p>
+      </section>
+
+      <section class="card danger-card">
+        <h2>Remove keys</h2>
+        <p class="desc">Deletes stored API keys from this browser.</p>
+        <button id="clearKeys" class="btn btn-danger">Remove keys</button>
+      </section>
+    </main>
+  </div>
+  <script src="settings.js"></script>
+</body>
+</html>

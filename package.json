@@ -1,16 +1,33 @@
 {
   "name": "voicecoder",
-  "version": "1.0.0",
-  "description": "Talk into your code editor. Natural language → real code at your cursor.",
+  "version": "2.0.0",
+  "description": "VoiceCoder \u2014 from voice to action. A voice-first development platform for VS Code and the browser.",
   "private": true,
   "type": "module",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
   "scripts": {
-    "build": "node scripts/build.js",
-    "watch": "node scripts/build.js --watch",
-    "zip": "node scripts/build.js && node scripts/zip.js"
+    "build": "npm run build -w voicecoder-vscode && npm run build -w @voicecoder/chrome",
+    "typecheck": "tsc -p packages/core && tsc -p apps/vscode --noEmit && tsc -p apps/chrome --noEmit",
+    "test": "vitest run",
+    "test:vscode": "npm run test:integration -w voicecoder-vscode",
+    "eval": "tsx eval/run.ts",
+    "screenshots": "tsx scripts/screenshots.ts"
   },
   "devDependencies": {
-    "archiver": "^6.0.1",
-    "esbuild": "^0.28.0"
+    "@types/node": "^22.20.5",
+    "esbuild": "^0.25.12",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.7"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/S-HEMANTH-REDDY/VoiceCoder.git"
   }
 }

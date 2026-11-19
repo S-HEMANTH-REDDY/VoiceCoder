@@ -1,0 +1,144 @@
+{"text": "go to line 45", "kind": "navigate", "expect": {"target": {"type": "line", "line": 45}}, "tags": ["navigation"]}
+{"text": "go to line forty five", "kind": "navigate", "expect": {"target": {"type": "line", "line": 45}}, "tags": ["navigation"]}
+{"text": "jump to line 120", "kind": "navigate", "expect": {"target": {"type": "line", "line": 120}}, "tags": ["navigation"]}
+{"text": "line 12", "kind": "navigate", "expect": {"target": {"type": "line", "line": 12}}, "tags": ["navigation"]}
+{"text": "take me to line three hundred", "kind": "navigate", "expect": {"target": {"type": "line", "line": 300}}, "tags": ["navigation"]}
+{"text": "scroll to line 88", "kind": "navigate", "expect": {"target": {"type": "line", "line": 88}}, "tags": ["navigation"]}
+{"text": "go to line 7 column 4", "kind": "navigate", "expect": {"target": {"type": "line", "line": 7}}, "tags": ["navigation"]}
+{"text": "please go to line 10", "kind": "navigate", "expect": {"target": {"type": "line", "line": 10}}, "tags": ["navigation"]}
+{"text": "move to line twenty two", "kind": "navigate", "expect": {"target": {"type": "line", "line": 22}}, "tags": ["navigation"]}
+{"text": "go to line one hundred and five", "kind": "navigate", "expect": {"target": {"type": "line", "line": 105}}, "tags": ["navigation"]}
+{"text": "open the authentication file", "kind": "navigate", "expect": {"target": {"type": "file", "query": "authentication"}}, "tags": ["navigation"]}
+{"text": "open package.json", "kind": "navigate", "expect": {"target": {"type": "file", "query": "package.json"}}, "tags": ["navigation"]}
+{"text": "switch to the user service file", "kind": "navigate", "expect": {"target": {"type": "file", "query": "user service"}}, "tags": ["navigation"]}
+{"text": "open readme", "kind": "navigate", "expect": {"target": {"type": "file", "query": "readme"}}, "tags": ["navigation"]}
+{"text": "open the login component", "kind": "navigate", "expect": {"target": {"type": "file", "query": "login"}}, "tags": ["navigation"]}
+{"text": "go to definition", "kind": "navigate", "expect": {"target": {"type": "definition"}}, "tags": ["navigation"]}
+{"text": "find all references", "kind": "navigate", "expect": {"target": {"type": "references"}}, "tags": ["navigation"]}
+{"text": "next error", "kind": "navigate", "expect": {"target": {"type": "next-error"}}, "tags": ["navigation"]}
+{"text": "go to the previous problem", "kind": "navigate", "expect": {"target": {"type": "previous-error"}}, "tags": ["navigation"]}
+{"text": "go to the top of the file", "kind": "navigate", "expect": {"target": {"type": "top"}}, "tags": ["navigation"]}
+{"text": "jump to the end of the file", "kind": "navigate", "expect": {"target": {"type": "bottom"}}, "tags": ["navigation"]}
+{"text": "where is this defined", "kind": "navigate", "expect": {"target": {"type": "definition"}}, "tags": ["navigation"]}
+{"text": "go back", "kind": "navigate", "expect": {"target": {"type": "back"}}, "tags": ["navigation"]}
+{"text": "go to the function called handle login", "kind": "navigate", "expect": {"target": {"type": "symbol", "query": "handle login"}}, "tags": ["navigation"]}
+{"text": "jump to class user repository", "kind": "navigate", "expect": {"target": {"type": "symbol", "query": "user repository"}}, "tags": ["navigation"]}
+{"text": "undo my last change", "kind": "control", "expect": {"action": "undo"}, "tags": ["control"]}
+{"text": "undo", "kind": "control", "expect": {"action": "undo"}, "tags": ["control"]}
+{"text": "scratch that", "kind": "control", "expect": {"action": "undo"}, "tags": ["control"]}
+{"text": "redo", "kind": "control", "expect": {"action": "redo"}, "tags": ["control"]}
+{"text": "accept these changes", "kind": "control", "expect": {"action": "accept"}, "tags": ["control"]}
+{"text": "accept", "kind": "control", "expect": {"action": "accept"}, "tags": ["control"]}
+{"text": "looks good", "kind": "control", "expect": {"action": "accept"}, "tags": ["control"]}
+{"text": "reject the changes", "kind": "control", "expect": {"action": "reject"}, "tags": ["control"]}
+{"text": "discard that", "kind": "control", "expect": {"action": "reject"}, "tags": ["control"]}
+{"text": "cancel", "kind": "control", "expect": {"action": "cancel"}, "tags": ["control"]}
+{"text": "never mind", "kind": "control", "expect": {"action": "cancel"}, "tags": ["control"]}
+{"text": "stop listening", "kind": "control", "expect": {"action": "stop-listening"}, "tags": ["control"]}
+{"text": "save the file", "kind": "control", "expect": {"action": "save"}, "tags": ["control"]}
+{"text": "format the document", "kind": "control", "expect": {"action": "format"}, "tags": ["control"]}
+{"text": "select this function", "kind": "control", "expect": {"action": "select-function"}, "tags": ["control"]}
+{"text": "select all", "kind": "control", "expect": {"action": "select-all"}, "tags": ["control"]}
+{"text": "new line", "kind": "control", "expect": {"action": "new-line"}, "tags": ["control"]}
+{"text": "do it again", "kind": "control", "expect": {"action": "repeat"}, "tags": ["control"]}
+{"text": "show history", "kind": "control", "expect": {"action": "show-history"}, "tags": ["control"]}
+{"text": "approve", "kind": "control", "expect": {"action": "accept"}, "tags": ["control"]}
+{"text": "deny", "kind": "control", "expect": {"action": "reject"}, "tags": ["control"]}
+{"text": "rename this variable to user count", "kind": "rename", "expect": {"newName": "userCount"}, "tags": ["rename"]}
+{"text": "rename this function to fetch orders", "kind": "rename", "expect": {"newName": "fetchOrders"}, "tags": ["rename"]}
+{"text": "rename this variable", "kind": "rename", "tags": ["rename"]}
+{"text": "rename this to max retries snake case", "kind": "rename", "expect": {"newName": "max_retries"}, "tags": ["rename"]}
+{"text": "run the unit tests", "kind": "test", "expect": {"action": "run"}, "tags": ["test"]}
+{"text": "run the tests", "kind": "test", "expect": {"action": "run"}, "tags": ["test"]}
+{"text": "run all the tests again", "kind": "test", "expect": {"action": "run"}, "tags": ["test"]}
+{"text": "execute the test suite", "kind": "test", "expect": {"action": "run"}, "tags": ["test"]}
+{"text": "write unit tests for this function", "kind": "test", "expect": {"action": "generate"}, "tags": ["test", "model"]}
+{"text": "add tests for the parser", "kind": "test", "expect": {"action": "generate"}, "tags": ["test", "model"]}
+{"text": "generate test cases for the login API", "kind": "test", "expect": {"action": "generate"}, "tags": ["test", "model"]}
+{"text": "create integration tests for the checkout flow", "kind": "test", "expect": {"action": "generate"}, "tags": ["test", "model"]}
+{"text": "run the application", "kind": "terminal", "expect": {"purpose": "run-app"}, "tags": ["terminal"]}
+{"text": "start the dev server", "kind": "terminal", "expect": {"purpose": "run-app"}, "tags": ["terminal"]}
+{"text": "launch the app", "kind": "terminal", "expect": {"purpose": "run-app"}, "tags": ["terminal"]}
+{"text": "install axios", "kind": "terminal", "tags": ["terminal", "model"]}
+{"text": "install the jsonwebtoken package", "kind": "terminal", "tags": ["terminal", "model"]}
+{"text": "npm install express", "kind": "terminal", "tags": ["terminal", "model"]}
+{"text": "run the build", "kind": "terminal", "tags": ["terminal", "model"]}
+{"text": "show git changes", "kind": "git", "expect": {"action": "diff"}, "tags": ["git"]}
+{"text": "what did I change", "kind": "git", "expect": {"action": "diff"}, "tags": ["git"]}
+{"text": "show the git status", "kind": "git", "expect": {"action": "status"}, "tags": ["git"]}
+{"text": "show recent commits", "kind": "git", "expect": {"action": "log"}, "tags": ["git"]}
+{"text": "generate a commit message", "kind": "git", "expect": {"action": "commit-message"}, "tags": ["git"]}
+{"text": "write a commit message", "kind": "git", "expect": {"action": "commit-message"}, "tags": ["git"]}
+{"text": "create a git commit", "kind": "git", "expect": {"action": "commit"}, "tags": ["git"]}
+{"text": "commit the changes", "kind": "git", "expect": {"action": "commit"}, "tags": ["git"]}
+{"text": "push my changes", "kind": "git", "expect": {"action": "push"}, "tags": ["git"]}
+{"text": "stage all changes", "kind": "git", "expect": {"action": "stage"}, "tags": ["git"]}
+{"text": "explain this function", "kind": "explain", "expect": {"target": "function"}, "tags": ["explain"]}
+{"text": "what does this function do", "kind": "explain", "expect": {"target": "function"}, "tags": ["explain"]}
+{"text": "explain this error", "kind": "explain", "expect": {"target": "error"}, "tags": ["explain"]}
+{"text": "what does this error mean", "kind": "explain", "expect": {"target": "error"}, "tags": ["explain"]}
+{"text": "explain this file", "kind": "explain", "expect": {"target": "file"}, "tags": ["explain"]}
+{"text": "explain this", "kind": "explain", "expect": {"target": "selection"}, "tags": ["explain"]}
+{"text": "walk me through this code", "kind": "explain", "expect": {"target": "selection"}, "tags": ["explain"]}
+{"text": "type TODO handle pagination", "kind": "dictation", "tags": ["dictation"]}
+{"text": "dictate thanks for the review, merging now", "kind": "dictation", "tags": ["dictation"]}
+{"text": "insert text this endpoint is deprecated", "kind": "dictation", "tags": ["dictation"]}
+{"text": "create a login API", "kind": "generate", "tags": ["generate", "model"]}
+{"text": "write a function that reverses a linked list", "kind": "generate", "tags": ["generate", "model"]}
+{"text": "create a React component for a user profile card", "kind": "generate", "tags": ["generate", "model"]}
+{"text": "add a binary search function", "kind": "generate", "tags": ["generate", "model"]}
+{"text": "create a TypeScript interface for an order with id, items and total", "kind": "generate", "tags": ["generate", "model"]}
+{"text": "write a regex that validates email addresses", "kind": "generate", "tags": ["generate", "model"]}
+{"text": "create an express middleware that logs request duration", "kind": "generate", "tags": ["generate", "model"]}
+{"text": "define an enum for HTTP status codes", "kind": "generate", "tags": ["generate", "model"]}
+{"text": "write a SQL query that returns the top ten customers by revenue", "kind": "generate", "tags": ["generate", "model"]}
+{"text": "create a class for an LRU cache", "kind": "generate", "tags": ["generate", "model"]}
+{"text": "generate a debounce helper", "kind": "generate", "tags": ["generate", "model"]}
+{"text": "write a Python function to read a CSV file into a list of dicts", "kind": "generate", "tags": ["generate", "model"]}
+{"text": "create a REST endpoint to delete a user by id", "kind": "generate", "tags": ["generate", "model"]}
+{"text": "add a function to format dates as ISO strings", "kind": "generate", "tags": ["generate", "model"]}
+{"text": "create a custom React hook for fetching data", "kind": "generate", "tags": ["generate", "model"]}
+{"text": "add JWT authentication", "kind": "modify", "tags": ["modify", "model", "edit"]}
+{"text": "actually use PostgreSQL", "kind": "modify", "tags": ["modify", "model", "follow-up"]}
+{"text": "make it asynchronous", "kind": "modify", "tags": ["modify", "model", "follow-up"]}
+{"text": "make it async", "kind": "modify", "tags": ["modify", "model", "follow-up"]}
+{"text": "add error handling to this function", "kind": "modify", "tags": ["modify", "model", "edit"]}
+{"text": "add input validation", "kind": "modify", "tags": ["modify", "model", "edit"]}
+{"text": "use a map instead of an object here", "kind": "modify", "tags": ["modify", "model", "edit"]}
+{"text": "change the return type to a promise", "kind": "modify", "tags": ["modify", "model", "edit"]}
+{"text": "add logging to this handler", "kind": "modify", "tags": ["modify", "model", "edit"]}
+{"text": "handle the empty list case", "kind": "modify", "tags": ["modify", "model", "edit"]}
+{"text": "add type hints", "kind": "modify", "tags": ["modify", "model", "edit"]}
+{"text": "make the timeout configurable", "kind": "modify", "tags": ["modify", "model", "follow-up"]}
+{"text": "optimize this code", "kind": "modify", "tags": ["modify", "model", "edit"]}
+{"text": "add a retry with exponential backoff", "kind": "modify", "tags": ["modify", "model", "edit"]}
+{"text": "convert this to use async await", "kind": "modify", "tags": ["modify", "model", "edit"]}
+{"text": "also return the user's email", "kind": "modify", "tags": ["modify", "model", "follow-up"]}
+{"text": "refactor this function", "kind": "refactor", "tags": ["refactor", "model"]}
+{"text": "extract this into a helper function", "kind": "refactor", "tags": ["refactor", "model"]}
+{"text": "split this function into smaller functions", "kind": "refactor", "tags": ["refactor", "model"]}
+{"text": "simplify this code", "kind": "refactor", "tags": ["refactor", "model"]}
+{"text": "clean up this class", "kind": "refactor", "tags": ["refactor", "model"]}
+{"text": "remove the duplicated logic", "kind": "refactor", "tags": ["refactor", "model"]}
+{"text": "fix this error", "kind": "debug", "tags": ["debug", "model"]}
+{"text": "why is this test failing", "kind": "debug", "tags": ["debug", "model"]}
+{"text": "fix the null pointer exception", "kind": "debug", "tags": ["debug", "model"]}
+{"text": "debug the failing build", "kind": "debug", "tags": ["debug", "model"]}
+{"text": "fix the type error on line 12", "kind": "debug", "tags": ["debug", "model"]}
+{"text": "the login returns undefined, fix it", "kind": "debug", "tags": ["debug", "model"]}
+{"text": "create a REST API with authentication, add input validation, write unit tests, and run them", "kind": "agent", "tags": ["agent", "model"]}
+{"text": "build a todo app backend with create, list and delete endpoints, then write tests and run them", "kind": "agent", "tags": ["agent", "model"]}
+{"text": "add a user model, create the migration, write tests and run them", "kind": "agent", "tags": ["agent", "model"]}
+{"text": "refactor the auth module, add error handling, update the tests and run them", "kind": "agent", "tags": ["agent", "model"]}
+{"text": "set up eslint, fix the lint errors, and commit the changes", "kind": "agent", "tags": ["agent", "model"]}
+{"text": "add jay w t authentication", "kind": "modify", "tags": ["asr-noise", "model"]}
+{"text": "parse the jason response", "kind": "modify", "tags": ["asr-noise", "model"]}
+{"text": "switch the database to post gress", "kind": "modify", "tags": ["asr-noise", "model"]}
+{"text": "um go to line uh forty two", "kind": "navigate", "expect": {"target": {"type": "line", "line": 42}}, "tags": ["asr-noise", "navigation"]}
+{"text": "show get diff", "kind": "git", "expect": {"action": "diff"}, "tags": ["asr-noise", "git"]}
+{"text": "run pie test", "kind": "test", "expect": {"action": "run"}, "tags": ["asr-noise", "test"]}
+{"text": "undo undo", "kind": "control", "expect": {"action": "undo"}, "tags": ["asr-noise", "control"]}
+{"text": "लाइन 45 पर जाओ", "kind": "navigate", "expect": {"target": {"type": "line", "line": 45}}, "tags": ["multilingual", "hi", "navigation"]}
+{"text": "इस फंक्शन में एरर हैंडलिंग जोड़ो", "kind": "modify", "tags": ["multilingual", "hi", "model"]}
+{"text": "ఈ ఫంక్షన్ ఏమి చేస్తుందో వివరించు", "kind": "explain", "tags": ["multilingual", "te", "model"]}
+{"text": "లాగిన్ API సృష్టించు", "kind": "generate", "tags": ["multilingual", "te", "model"]}

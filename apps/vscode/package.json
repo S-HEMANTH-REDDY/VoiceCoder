@@ -1,0 +1,344 @@
+{
+  "name": "voicecoder-vscode",
+  "displayName": "VoiceCoder",
+  "description": "From voice to action. Speak intentions; VoiceCoder edits, navigates, debugs, tests and commits \u2014 with reversible, reviewable changes.",
+  "version": "2.0.0",
+  "publisher": "voicecoder",
+  "private": true,
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": [
+    "AI",
+    "Programming Languages",
+    "Other"
+  ],
+  "keywords": [
+    "voice",
+    "speech",
+    "dictation",
+    "ai",
+    "agent",
+    "accessibility"
+  ],
+  "icon": "media/icon.png",
+  "main": "./out/extension.js",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": "limited",
+      "description": "In untrusted workspaces VoiceCoder disables terminal commands, test runs and git writes."
+    },
+    "virtualWorkspaces": false
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "voicecoder.toggleListening",
+        "title": "Toggle Listening",
+        "category": "VoiceCoder",
+        "icon": "$(mic)"
+      },
+      {
+        "command": "voicecoder.startListening",
+        "title": "Start Listening",
+        "category": "VoiceCoder"
+      },
+      {
+        "command": "voicecoder.stopListening",
+        "title": "Stop Listening",
+        "category": "VoiceCoder"
+      },
+      {
+        "command": "voicecoder.typeCommand",
+        "title": "Type a Voice Command\u2026",
+        "category": "VoiceCoder",
+        "icon": "$(keyboard)"
+      },
+      {
+        "command": "voicecoder.accept",
+        "title": "Accept Change",
+        "category": "VoiceCoder",
+        "icon": "$(check)"
+      },
+      {
+        "command": "voicecoder.reject",
+        "title": "Reject Change",
+        "category": "VoiceCoder",
+        "icon": "$(discard)"
+      },
+      {
+        "command": "voicecoder.undo",
+        "title": "Undo Last VoiceCoder Change",
+        "category": "VoiceCoder"
+      },
+      {
+        "command": "voicecoder.cancel",
+        "title": "Cancel Current Command",
+        "category": "VoiceCoder"
+      },
+      {
+        "command": "voicecoder.setApiKey",
+        "title": "Set API Key\u2026",
+        "category": "VoiceCoder"
+      },
+      {
+        "command": "voicecoder.clearApiKeys",
+        "title": "Remove Stored API Keys",
+        "category": "VoiceCoder"
+      },
+      {
+        "command": "voicecoder.showPanel",
+        "title": "Show Assistant",
+        "category": "VoiceCoder"
+      },
+      {
+        "command": "voicecoder.resetMetrics",
+        "title": "Reset Performance Metrics",
+        "category": "VoiceCoder"
+      },
+      {
+        "command": "voicecoder.clearMemory",
+        "title": "Forget Conversation",
+        "category": "VoiceCoder"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "voicecoder.toggleListening",
+        "key": "alt+space",
+        "mac": "alt+space"
+      },
+      {
+        "command": "voicecoder.typeCommand",
+        "key": "ctrl+alt+k",
+        "mac": "cmd+alt+k"
+      },
+      {
+        "command": "voicecoder.accept",
+        "key": "ctrl+alt+enter",
+        "mac": "cmd+alt+enter",
+        "when": "voicecoder.hasPendingChange"
+      },
+      {
+        "command": "voicecoder.reject",
+        "key": "ctrl+alt+backspace",
+        "mac": "cmd+alt+backspace",
+        "when": "voicecoder.hasPendingChange"
+      },
+      {
+        "command": "voicecoder.cancel",
+        "key": "escape",
+        "when": "voicecoder.busy && !inputFocus && !suggestWidgetVisible"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "voicecoder",
+          "title": "VoiceCoder",
+          "icon": "media/activity.svg"
+        }
+      ]
+    },
+    "views": {
+      "voicecoder": [
+        {
+          "type": "webview",
+          "id": "voicecoder.assistant",
+          "name": "Assistant"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "voicecoder.toggleListening",
+          "when": "view == voicecoder.assistant",
+          "group": "navigation"
+        },
+        {
+          "command": "voicecoder.typeCommand",
+          "when": "view == voicecoder.assistant",
+          "group": "navigation"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "VoiceCoder",
+      "properties": {
+        "voicecoder.llm.provider": {
+          "type": "string",
+          "enum": [
+            "anthropic",
+            "openai"
+          ],
+          "default": "anthropic",
+          "markdownDescription": "Model provider for intent classification and code changes. API keys are stored in VS Code Secret Storage (`VoiceCoder: Set API Key\u2026`)."
+        },
+        "voicecoder.llm.model": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Model for code changes, debugging and the agent. Empty uses the provider default (`claude-opus-5-5` / `gpt-4.1`)."
+        },
+        "voicecoder.llm.fastModel": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Model for intent classification. Empty uses `voicecoder.llm.model` at low effort."
+        },
+        "voicecoder.speech.provider": {
+          "type": "string",
+          "enum": [
+            "browser",
+            "native"
+          ],
+          "enumDescriptions": [
+            "Streams speech through a local VoiceCoder microphone page in your browser (Web Speech API: real-time interim results, no extra key).",
+            "Captures the microphone natively with ffmpeg, detects speech automatically and transcribes with OpenAI (needs ffmpeg and an OpenAI key)."
+          ],
+          "default": "browser",
+          "description": "How VoiceCoder captures and transcribes speech."
+        },
+        "voicecoder.speech.language": {
+          "type": "string",
+          "enum": [
+            "en-US",
+            "en-GB",
+            "en-IN",
+            "hi-IN",
+            "te-IN"
+          ],
+          "enumDescriptions": [
+            "English (US)",
+            "English (UK)",
+            "English (India)",
+            "Hindi",
+            "Telugu"
+          ],
+          "default": "en-US",
+          "description": "Speech recognition language. Hindi and Telugu depend on the speech engine's support."
+        },
+        "voicecoder.speech.mode": {
+          "type": "string",
+          "enum": [
+            "continuous",
+            "push-to-talk"
+          ],
+          "enumDescriptions": [
+            "Listen continuously; each pause ends a command.",
+            "Toggle the hotkey to start, toggle again to send the command."
+          ],
+          "default": "continuous"
+        },
+        "voicecoder.speech.ffmpegPath": {
+          "type": "string",
+          "default": "ffmpeg",
+          "description": "Path to ffmpeg for the native microphone provider."
+        },
+        "voicecoder.speech.nativeInputDevice": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "ffmpeg input device. Empty uses the system default (`:default` on macOS avfoundation, `default` on Linux pulse, `audio=` device name on Windows dshow)."
+        },
+        "voicecoder.edits.review": {
+          "type": "string",
+          "enum": [
+            "apply-and-review",
+            "preview-first"
+          ],
+          "enumDescriptions": [
+            "Apply immediately and show an inline diff; say \"reject\" to revert.",
+            "Show a diff first; nothing changes until you say \"accept\"."
+          ],
+          "default": "apply-and-review"
+        },
+        "voicecoder.context.budgetTokens": {
+          "type": "number",
+          "default": 6000,
+          "minimum": 1000,
+          "maximum": 60000,
+          "description": "Maximum tokens of editor context sent with a code change."
+        },
+        "voicecoder.agent.maxSteps": {
+          "type": "number",
+          "default": 16,
+          "minimum": 1,
+          "maximum": 50,
+          "description": "Maximum tool calls per agent run."
+        },
+        "voicecoder.terminal.timeoutSeconds": {
+          "type": "number",
+          "default": 300,
+          "minimum": 5,
+          "description": "Timeout for commands VoiceCoder runs (tests, builds)."
+        }
+      }
+    },
+    "walkthroughs": [
+      {
+        "id": "voicecoder.start",
+        "title": "Get started with VoiceCoder",
+        "description": "Speak intentions, not keystrokes.",
+        "steps": [
+          {
+            "id": "key",
+            "title": "Connect a model",
+            "description": "VoiceCoder classifies intents and writes code with Claude or OpenAI. Keys stay in VS Code Secret Storage.\n[Set API key](command:voicecoder.setApiKey)",
+            "media": {
+              "markdown": "media/walkthrough/key.md"
+            },
+            "completionEvents": [
+              "onCommand:voicecoder.setApiKey"
+            ]
+          },
+          {
+            "id": "mic",
+            "title": "Turn on the microphone",
+            "description": "Press \u2325Space (Alt+Space). VoiceCoder opens its microphone page; allow the microphone once.\n[Start listening](command:voicecoder.startListening)",
+            "media": {
+              "markdown": "media/walkthrough/mic.md"
+            },
+            "completionEvents": [
+              "onCommand:voicecoder.startListening",
+              "onCommand:voicecoder.toggleListening"
+            ]
+          },
+          {
+            "id": "try",
+            "title": "Say something",
+            "description": "Try \u201ccreate a function that validates an email address\u201d, then \u201cmake it return a reason\u201d, then \u201cundo\u201d.\n[Type a command instead](command:voicecoder.typeCommand)",
+            "media": {
+              "markdown": "media/walkthrough/try.md"
+            },
+            "completionEvents": [
+              "onCommand:voicecoder.typeCommand"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "build": "node build.mjs",
+    "watch": "node build.mjs --watch",
+    "package": "node build.mjs --production && vsce package --no-dependencies -o voicecoder.vsix",
+    "test:integration": "node build.mjs && node out/test/run.js"
+  },
+  "dependencies": {
+    "@voicecoder/core": "*",
+    "zod": "^4.1.0"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.10",
+    "@types/vscode": "~1.95.0",
+    "@vscode/test-electron": "^3.1.0",
+    "@vscode/vsce": "^3.6.0",
+    "mocha": "^11.7.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/S-HEMANTH-REDDY/VoiceCoder.git"
+  }
+}

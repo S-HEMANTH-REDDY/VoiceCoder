@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>VoiceCoder editor compatibility fixture</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/codemirror.min.css">
+<style>
+  body { font: 13px sans-serif; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 12px; }
+  .box { border: 1px solid #ccc; height: 160px; position: relative; }
+  #ace { height: 160px; }
+  #monaco { height: 160px; }
+</style>
+</head>
+<body>
+  <div><b>textarea</b><textarea id="ta" rows="8" cols="40" name="solution-code">function add(a, b) {
+  return a + b;
+}
+</textarea></div>
+  <div><b>contenteditable</b><div id="ce" class="box" contenteditable="true">Hello</div></div>
+  <div><b>CodeMirror 5</b><div id="cm5" class="box"></div></div>
+  <div><b>CodeMirror 6</b><div id="cm6" class="box"></div></div>
+  <div><b>Ace</b><div id="ace" class="box"></div></div>
+  <div><b>Monaco</b><div id="monaco" class="box"></div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/mode/javascript/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.36.5/ace.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.52.2/min/vs/loader.js"></script>
+<script>
+  const SRC = 'function add(a, b) {\n  return a + b;\n}\n';
+  window.cm5 = CodeMirror(document.getElementById('cm5'), { value: SRC, mode: 'javascript' });
+  window.aceEditor = ace.edit('ace');
+  aceEditor.setValue(SRC, -1);
+  require.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.52.2/min/vs' } });
+  window.MonacoEnvironment = { getWorkerUrl: () => 'data:text/javascript;charset=utf-8,' + encodeURIComponent("self.MonacoEnvironment={baseUrl:'https://cdn.jsdelivr.net/npm/monaco-editor@0.52.2/min/'};importScripts('https://cdn.jsdelivr.net/npm/monaco-editor@0.52.2/min/vs/base/worker/workerMain.js');") };
+  require(['vs/editor/editor.main'], () => {
+    window.monacoEditor = monaco.editor.create(document.getElementById('monaco'), { value: SRC, language: 'javascript', automaticLayout: true });
+    window.monacoReady = true;
+  });
+</script>
+<script type="module">
+  import { EditorView, basicSetup } from 'https://esm.sh/codemirror@6.0.1';
+  import { javascript } from 'https://esm.sh/@codemirror/lang-javascript@6.2.2';
+  window.cm6 = new EditorView({ doc: 'function add(a, b) {\n  return a + b;\n}\n', extensions: [basicSetup, javascript()], parent: document.getElementById('cm6') });
+  window.cm6Ready = true;
+</script>
+</body>
+</html>

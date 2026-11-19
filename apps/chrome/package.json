@@ -1,0 +1,19 @@
+{
+  "name": "@voicecoder/chrome",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.js",
+    "zip": "node scripts/build.js && node scripts/zip.js",
+    "test:browser": "node scripts/build.js && tsx test/browser/editors.ts"
+  },
+  "dependencies": {
+    "@voicecoder/core": "*"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.300",
+    "archiver": "^6.0.1",
+    "puppeteer-core": "^25.18.1"
+  }
+}
