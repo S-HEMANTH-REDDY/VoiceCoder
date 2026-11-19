@@ -160,7 +160,9 @@ function render(): void {
   if (!s.trusted) blocks.push(h('div', { class: 'notice' }, 'Untrusted workspace: commands, test runs, git writes and the agent are disabled.'));
   if (s.approval) blocks.push(approvalCard(s.approval));
   if (s.agent && (s.agent.status !== 'done' || s.current?.intent === 'agent')) blocks.push(agentCard(s.agent));
-  if (s.current) blocks.push(commandCard(s.current, s));
+  // While an agent run is in progress its card carries the status; skip the duplicate.
+  const agentRunning = s.agent && s.current?.intent === 'agent' && s.current.status === 'running';
+  if (s.current && !agentRunning) blocks.push(commandCard(s.current, s));
   if (!s.current && s.hasKey && !s.approval) blocks.push(emptyState());
   main.replaceChildren(...blocks);
 

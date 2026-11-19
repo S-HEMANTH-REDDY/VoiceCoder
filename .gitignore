@@ -5,10 +5,13 @@ dist/
 Thumbs.db
 .env
 .env.local
-.vscode/
+.vscode/*
+!.vscode/launch.json
+!.vscode/tasks.json
 .idea/
 *.vsix
 apps/vscode/out/
 apps/vscode/.vscode-test/
 eval/results/*.local.json
 coverage/
+apps/chrome/dist/

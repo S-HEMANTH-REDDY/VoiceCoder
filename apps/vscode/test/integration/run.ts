@@ -55,7 +55,7 @@ async function main(): Promise<void> {
     extensionTestsPath,
     vscodeExecutablePath: local,
     launchArgs: [workspace, '--disable-extensions', '--disable-workspace-trust', `--user-data-dir=${userData}`, `--extensions-dir=${extensionsDir}`, '--skip-welcome', '--skip-release-notes'],
-    extensionTestsEnv: { VOICECODER_FIXTURE: workspace },
+    extensionTestsEnv: { VOICECODER_FIXTURE: workspace, VOICECODER_RESULTS: resolve(__dirname, '../../../../eval/results/vscode-local-latency.json') },
   });
 }
 

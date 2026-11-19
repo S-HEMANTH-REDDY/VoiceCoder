@@ -53,10 +53,10 @@ Select any code, then say *"refactor this"*, *"simplify this function"*, *"add c
 
 ### Privacy & Security
 
-- **Your API key is sandboxed** in `chrome.storage.local` — page JavaScript cannot access it
-- **No code is stored or logged** — your code never leaves your browser except the LLM call
-- All LLM traffic goes directly from the extension's service worker to `api.openai.com` over HTTPS
-- Minimal permissions: `activeTab`, `storage`, `scripting`
+- **Your API key never leaves the background worker.** Page scripts and content scripts cannot read it.
+- **No code or transcripts are stored or logged.** Code leaves your browser only in the model call.
+- Model traffic goes directly from the extension's service worker to `api.anthropic.com` or `api.openai.com` over HTTPS
+- Minimal permissions: `activeTab`, `storage`, `scripting`; host access only to the two model APIs
 
 ---
 
@@ -64,7 +64,7 @@ Select any code, then say *"refactor this"*, *"simplify this function"*, *"add c
 
 1. Install the extension
 2. Click the VoiceCoder icon → **Settings (⚙)**
-3. Paste your [OpenAI API key](https://platform.openai.com/api-keys)
+3. Choose Anthropic or OpenAI and paste your API key
 4. Click **Save** — you're ready
 
 Bring Your Own Key (BYOK). You control your API usage and costs.
@@ -79,9 +79,9 @@ Last updated: May 2026
 
 VoiceCoder does not collect, store, or transmit any personal data to its own servers.
 
-- **API Key:** Stored locally in `chrome.storage.local`, sandboxed to the extension. Never sent anywhere except to `api.openai.com` as an Authorization header on your API calls.
-- **Voice / Audio:** Processed locally by the browser's Web Speech API. Audio is never sent to VoiceCoder servers.
-- **Code:** The code context (last 10 lines above your cursor) is sent to `api.openai.com` as part of the LLM prompt. This is governed by OpenAI's privacy policy. VoiceCoder itself does not store or log this data.
+- **API Key:** Stored locally in `chrome.storage.local` and read only by the extension's background worker. Sent only to the provider you choose (`api.anthropic.com` or `api.openai.com`) as an authentication header.
+- **Voice / Audio:** Recognised by the browser's Web Speech API (Chrome uses its own speech service). Audio is never sent to VoiceCoder servers.
+- **Code:** When a command needs the model, the editor context (code around the cursor, or the file if small, plus your selection) is sent to the chosen provider as part of the prompt, governed by that provider's privacy policy. VoiceCoder itself does not store or log this data.
 - **No analytics, no tracking, no third-party scripts.**
 
 For questions: [your email here]

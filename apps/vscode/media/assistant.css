@@ -9,7 +9,7 @@
   --vc-err: var(--vscode-errorForeground, #d1453b);
   --vc-fg: var(--vscode-foreground);
   --vc-muted: var(--vscode-descriptionForeground);
-  --vc-border: var(--vscode-widget-border, color-mix(in srgb, var(--vc-fg) 14%, transparent));
+  --vc-border: color-mix(in srgb, var(--vc-fg) 15%, transparent);
   --vc-surface: color-mix(in srgb, var(--vc-fg) 4%, var(--vscode-sideBar-background, transparent));
   --vc-surface-2: color-mix(in srgb, var(--vc-fg) 7%, var(--vscode-sideBar-background, transparent));
   --vc-mono: var(--vscode-editor-font-family, ui-monospace, Menlo, monospace);

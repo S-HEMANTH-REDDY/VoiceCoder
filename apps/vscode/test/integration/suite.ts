@@ -194,6 +194,30 @@ export async function run(): Promise<void> {
       assert.equal(orch.state().current?.source, 'local');
     });
 
+    it('benchmarks local voice commands end to end in the editor (60 commands)', async function () {
+      this.timeout(120_000);
+      const ed = await open('src/math.js');
+      const phrases = ['go to line 3', 'go to line nine', 'jump to line 11', 'go to the top of the file', 'go to the end of the file', 'line 6'];
+      const samples: number[] = [];
+      for (let i = 0; i < 60; i++) {
+        const phrase = phrases[i % phrases.length]!;
+        const t0 = performance.now();
+        await orch.handleUtterance(phrase, 'typed');
+        samples.push(performance.now() - t0);
+        await sleep(15); // let the UI coalescing timer settle between commands
+      }
+      void ed;
+      const sorted = [...samples].sort((a, b) => a - b);
+      const q = (p: number) => sorted[Math.min(sorted.length - 1, Math.ceil((p / 100) * sorted.length) - 1)]!;
+      const result = { what: 'handleUtterance() for local navigation commands in a real VS Code instance (transcript in → cursor moved)', n: sorted.length, p50: +q(50).toFixed(2), p95: +q(95).toFixed(2), max: +sorted.at(-1)!.toFixed(2), vscode: vscode.version, platform: `${process.platform}-${process.arch}`, date: new Date().toISOString() };
+      console.log(`    ${JSON.stringify(result)}`);
+      if (process.env.VOICECODER_RESULTS) {
+        const fs = await import('node:fs');
+        fs.writeFileSync(process.env.VOICECODER_RESULTS, JSON.stringify(result, null, 2));
+      }
+      assert.ok(result.p95 < 500, `p95 ${result.p95}ms exceeds the 500ms target`);
+    });
+
     it('opens a file by spoken name', async () => {
       await open('src/math.js');
       const t0 = performance.now();

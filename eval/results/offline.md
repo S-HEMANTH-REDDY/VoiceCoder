@@ -1,6 +1,6 @@
 # VoiceCoder evaluation — offline
 
-Measured 2026-11-19T09:31:14.965Z on darwin-arm64 (Apple M3), Node v22.11.0. No model calls (offline mode).
+Measured 2026-11-19T09:33:21.644Z on darwin-arm64 (Apple M3), Node v22.11.0. No model calls (offline mode).
 
 ## Intent classification (144 commands)
 
@@ -10,8 +10,8 @@ Measured 2026-11-19T09:31:14.965Z on darwin-arm64 (Apple M3), Node v22.11.0. No 
 | Field accuracy (line numbers, targets, actions; 82 checks) | 100% |
 | Handled by local grammar (no model) | 56.9% |
 | Local grammar precision | 100% |
-| Classification latency · local (n=82) | p50 0.012 ms · p95 0.162 ms |
-| Classification latency · heuristic (n=62) | p50 0.014 ms · p95 0.449 ms |
+| Classification latency · local (n=82) | p50 0.013 ms · p95 0.177 ms |
+| Classification latency · heuristic (n=62) | p50 0.015 ms · p95 0.455 ms |
 
 | Kind | n | accuracy |
 |---|---|---|

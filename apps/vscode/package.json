@@ -1,11 +1,10 @@
 {
   "name": "voicecoder-vscode",
   "displayName": "VoiceCoder",
-  "description": "From voice to action. Speak intentions; VoiceCoder edits, navigates, debugs, tests and commits — with reversible, reviewable changes.",
+  "description": "From voice to action. Speak intentions; VoiceCoder edits, navigates, debugs, tests and commits \u2014 with reversible, reviewable changes.",
   "version": "2.0.0",
   "publisher": "voicecoder",
   "private": true,
-  "license": "MIT",
   "engines": {
     "vscode": "^1.95.0"
   },
@@ -54,7 +53,7 @@
       },
       {
         "command": "voicecoder.typeCommand",
-        "title": "Type a Voice Command…",
+        "title": "Type a Voice Command\u2026",
         "category": "VoiceCoder",
         "icon": "$(keyboard)"
       },
@@ -82,7 +81,7 @@
       },
       {
         "command": "voicecoder.setApiKey",
-        "title": "Set API Key…",
+        "title": "Set API Key\u2026",
         "category": "VoiceCoder"
       },
       {
@@ -177,7 +176,7 @@
             "openai"
           ],
           "default": "anthropic",
-          "markdownDescription": "Model provider for intent classification and code changes. API keys are stored in VS Code Secret Storage (`VoiceCoder: Set API Key…`)."
+          "markdownDescription": "Model provider for intent classification and code changes. API keys are stored in VS Code Secret Storage (`VoiceCoder: Set API Key\u2026`)."
         },
         "voicecoder.llm.model": {
           "type": "string",
@@ -297,7 +296,7 @@
           {
             "id": "mic",
             "title": "Turn on the microphone",
-            "description": "Press ⌥Space (Alt+Space). VoiceCoder opens its microphone page; allow the microphone once.\n[Start listening](command:voicecoder.startListening)",
+            "description": "Press \u2325Space (Alt+Space). VoiceCoder opens its microphone page; allow the microphone once.\n[Start listening](command:voicecoder.startListening)",
             "media": {
               "markdown": "media/walkthrough/mic.md"
             },
@@ -309,7 +308,7 @@
           {
             "id": "try",
             "title": "Say something",
-            "description": "Try “create a function that validates an email address”, then “make it return a reason”, then “undo”.\n[Type a command instead](command:voicecoder.typeCommand)",
+            "description": "Try \u201ccreate a function that validates an email address\u201d, then \u201cmake it return a reason\u201d, then \u201cundo\u201d.\n[Type a command instead](command:voicecoder.typeCommand)",
             "media": {
               "markdown": "media/walkthrough/try.md"
             },
@@ -337,5 +336,9 @@
     "@vscode/test-electron": "^3.1.0",
     "@vscode/vsce": "^3.6.0",
     "mocha": "^11.7.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/S-HEMANTH-REDDY/VoiceCoder.git"
   }
 }
