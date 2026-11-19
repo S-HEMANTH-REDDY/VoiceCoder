@@ -1,0 +1,1 @@
+{ "name": "voicecoder-vscode", "version": "2.0.0", "private": true, "scripts": { "build": "node build.mjs" }, "dependencies": { "@voicecoder/core": "*" } }

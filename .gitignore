@@ -7,3 +7,8 @@ Thumbs.db
 .env.local
 .vscode/
 .idea/
+*.vsix
+apps/vscode/out/
+apps/vscode/.vscode-test/
+eval/results/*.local.json
+coverage/

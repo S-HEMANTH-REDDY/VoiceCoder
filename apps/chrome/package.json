@@ -1,0 +1,9 @@
+{
+  "name": "@voicecoder/chrome",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": { "build": "node scripts/build.js", "zip": "node scripts/build.js && node scripts/zip.js" },
+  "dependencies": { "@voicecoder/core": "*" },
+  "devDependencies": { "archiver": "^6.0.1", "@types/chrome": "^0.0.300" }
+}
