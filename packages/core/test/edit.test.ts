@@ -125,6 +125,16 @@ describe('TransactionLog', () => {
     expect(log.peekRedo()).toBeUndefined();
   });
 
+  it('redoes the most recently undone change, not an older one', () => {
+    const log = new TransactionLog();
+    const a = log.record('a', []);
+    log.markUndone(a); // e.g. a rejected change
+    const b = log.record('b', []);
+    expect(log.peekRedo()).toBeUndefined(); // new change clears redo
+    log.markUndone(b);
+    expect(log.peekRedo()).toBe(b);
+  });
+
   it('bounds its history', () => {
     const log = new TransactionLog(3);
     for (let i = 0; i < 5; i++) log.record(String(i), []);

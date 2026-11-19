@@ -21,3 +21,4 @@ export * from './safety/command-policy.js';
 export * from './metrics/latency.js';
 export * from './util/coordinator.js';
 export * from './agent/agent.js';
+export * from './util/files.js';

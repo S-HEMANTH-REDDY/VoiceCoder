@@ -28,6 +28,8 @@ export interface TextStore {
 
 export class TransactionLog {
   private readonly items: Transaction[] = [];
+  /** Undone transactions, most recent last. Cleared when a new change is recorded. */
+  private redoStack: Transaction[] = [];
   private seq = 0;
 
   constructor(private readonly limit = 50) {}
@@ -35,6 +37,7 @@ export class TransactionLog {
   record(label: string, docs: DocumentSnapshot[]): Transaction {
     const tx: Transaction = { id: `tx-${++this.seq}`, label, at: Date.now(), docs, state: 'applied' };
     this.items.push(tx);
+    this.redoStack = [];
     if (this.items.length > this.limit) this.items.shift();
     return tx;
   }
@@ -45,16 +48,9 @@ export class TransactionLog {
     return undefined;
   }
 
-  /** Most recently undone transaction, if nothing was applied after it. */
+  /** Most recently undone transaction, if no new change was recorded since. */
   peekRedo(): Transaction | undefined {
-    const last = this.items.at(-1);
-    if (!last) return undefined;
-    for (let i = this.items.length - 1; i >= 0; i--) {
-      const t = this.items[i]!;
-      if (t.state === 'applied') return undefined;
-      if (i === 0 || this.items[i - 1]!.state === 'applied') return t;
-    }
-    return undefined;
+    return this.redoStack.at(-1);
   }
 
   get(id: string): Transaction | undefined {
@@ -89,9 +85,12 @@ export class TransactionLog {
 
   markUndone(tx: Transaction): void {
     tx.state = 'undone';
+    this.redoStack = this.redoStack.filter((t) => t !== tx);
+    this.redoStack.push(tx);
   }
 
   markApplied(tx: Transaction): void {
     tx.state = 'applied';
+    this.redoStack = this.redoStack.filter((t) => t !== tx);
   }
 }

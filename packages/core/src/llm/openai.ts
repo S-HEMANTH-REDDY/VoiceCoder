@@ -118,39 +118,60 @@ export class OpenAIProvider implements LLMProvider {
     }
   }
 
-  async structured<S extends z.ZodType>(req: CompletionRequest & { schema: S; schemaName: string }): Promise<StructuredResult<z.infer<S>>> {
+  async structured<S extends z.ZodType>(req: CompletionRequest & { schema: S; schemaName: string }, handlers?: StreamHandlers): Promise<StructuredResult<z.infer<S>>> {
     const started = now();
     const model = req.tier === 'fast' ? this.fastModel : this.model;
+    const responseFormat = {
+      response_format: { type: 'json_schema', json_schema: { name: req.schemaName, strict: true, schema: toStrictJsonSchema(req.schema) } },
+    };
     try {
-      const res = await this.post(
-        this.body(req, {
-          response_format: {
-            type: 'json_schema',
-            json_schema: { name: req.schemaName, strict: true, schema: toStrictJsonSchema(req.schema) },
-          },
-        }),
-        req.signal,
-      );
-      const data = (await res.json()) as {
-        choices: Array<{ message: { content: string | null; refusal?: string | null } }>;
-        usage: { prompt_tokens: number; completion_tokens: number };
-      };
-      const msg = data.choices[0]?.message;
-      if (msg?.refusal) throw new LLMError('The model declined this request.', 'refused', false);
+      let content = '';
+      let usage: Usage = { inputTokens: 0, outputTokens: 0 };
+      if (handlers) {
+        const res = await this.post(this.body(req, { ...responseFormat, stream: true, stream_options: { include_usage: true } }), req.signal);
+        let first = true;
+        for await (const data of readSse(res, req.signal)) {
+          if (data === '[DONE]') break;
+          const chunk = JSON.parse(data) as {
+            choices?: Array<{ delta?: { content?: string; refusal?: string } }>;
+            usage?: { prompt_tokens: number; completion_tokens: number };
+          };
+          const d = chunk.choices?.[0]?.delta;
+          if (d?.refusal) throw new LLMError('The model declined this request.', 'refused', false);
+          if (d?.content) {
+            if (first) {
+              first = false;
+              handlers.onFirstToken?.(now() - started);
+            }
+            content += d.content;
+            handlers.onText?.(d.content, content);
+          }
+          if (chunk.usage) usage = { inputTokens: chunk.usage.prompt_tokens, outputTokens: chunk.usage.completion_tokens };
+        }
+      } else {
+        const res = await this.post(this.body(req, responseFormat), req.signal);
+        const data = (await res.json()) as {
+          choices: Array<{ message: { content: string | null; refusal?: string | null } }>;
+          usage: { prompt_tokens: number; completion_tokens: number };
+        };
+        const msg = data.choices[0]?.message;
+        if (msg?.refusal) throw new LLMError('The model declined this request.', 'refused', false);
+        content = msg?.content ?? '';
+        usage = { inputTokens: data.usage.prompt_tokens, outputTokens: data.usage.completion_tokens };
+      }
       let raw: unknown;
       try {
-        raw = extractJson(msg?.content ?? '');
+        raw = extractJson(content);
       } catch {
         throw new LLMError('Model returned malformed JSON.', 'invalid-output', true);
       }
       const parsed = req.schema.safeParse(raw);
       if (!parsed.success) throw new LLMError(`Model output failed ${req.schemaName} validation.`, 'invalid-output', true);
-      const usage = { inputTokens: data.usage.prompt_tokens, outputTokens: data.usage.completion_tokens };
       const latencyMs = now() - started;
       this.opts.observer?.({ provider: this.id, model, purpose: req.purpose, latencyMs, usage, ok: true });
       return { value: parsed.data, usage, latencyMs, model };
     } catch (err) {
-      const e = err instanceof LLMError ? err : new LLMError(String(err), 'server', false);
+      const e = err instanceof LLMError ? err : req.signal?.aborted ? new LLMError('Request cancelled.', 'cancelled', false) : new LLMError(String(err), 'server', false);
       this.opts.observer?.({ provider: this.id, model, purpose: req.purpose, latencyMs: now() - started, ok: false, errorKind: e.kind });
       throw e;
     }

@@ -30,11 +30,11 @@ const rules: Rule[] = [
       : null,
   (t, tr) => (/^redo(?: that| it)?$/.test(t) ? local<'control'>({ kind: 'control', action: 'redo' }, tr) : null),
   (t, tr) =>
-    /^(?:accept|apply|keep|approve)(?: (?:it|this|that|these|those|the|all))*(?: (?:changes?|edits?|diff|patch|suggestions?))?$|^(?:looks good|ship it|lgtm|yes apply( it)?)$/.test(t)
+    /^(?:accept|apply|keep|approve)(?: (?:it|this|that|these|those|the|all))*(?: (?:changes?|edits?|diff|patch|suggestions?))?$|^(?:looks good|ship it|lgtm|yes apply( it)?|yes|yep|go ahead|do it|run it|approved)$/.test(t)
       ? local<'control'>({ kind: 'control', action: 'accept' }, tr)
       : null,
   (t, tr) =>
-    /^(?:reject|discard|decline|throw away|drop)(?: (?:it|this|that|these|those|the|all))*(?: (?:changes?|edits?|diff|patch|suggestions?))?$|^(?:no don't apply( it)?|don't apply( it)?)$/.test(t)
+    /^(?:reject|discard|decline|deny|throw away|drop)(?: (?:it|this|that|these|those|the|all))*(?: (?:changes?|edits?|diff|patch|suggestions?))?$|^(?:no don't apply( it)?|don't apply( it)?|no|nope|don't do it|don't run it)$/.test(t)
       ? local<'control'>({ kind: 'control', action: 'reject' }, tr)
       : null,
   (t, tr) =>

@@ -105,7 +105,8 @@ export class SessionMemory {
     let used = 0;
     for (let i = this.turns.length - 1; i >= 0; i--) {
       const t = this.turns[i]!;
-      const line = `- [${t.kind}] "${t.transcript}" → ${t.ok ? t.outcome : `failed: ${t.outcome}`}${t.file ? ` (${t.file})` : ''}`;
+      const asked = t.instruction && t.instruction !== t.transcript ? `"${t.transcript}" (understood as: ${t.instruction})` : `"${t.transcript}"`;
+      const line = `- [${t.kind}] ${asked} → ${t.ok ? t.outcome : `failed: ${t.outcome}`}${t.file ? ` (${t.file})` : ''}`;
       const cost = estimateTokens(line);
       if (used + cost > budgetTokens) break;
       lines.unshift(line);

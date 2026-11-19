@@ -36,6 +36,11 @@ export interface AgentTool<S extends z.ZodType = z.ZodType> {
   run(input: z.infer<S>, ctx: { signal: AbortSignal }): Promise<ToolResult>;
 }
 
+/** Preserves input typing while defining a tool; the runtime validates inputs with `input`. */
+export function defineTool<S extends z.ZodType>(tool: AgentTool<S>): AgentTool {
+  return tool as unknown as AgentTool;
+}
+
 export const PlanSchema = z.object({
   goal: z.string(),
   steps: z.array(z.object({ title: z.string(), detail: z.string() })),

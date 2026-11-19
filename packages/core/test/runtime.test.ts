@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { z } from 'zod';
 import { CommandCoordinator } from '../src/util/coordinator.js';
 import { MetricsRecorder, percentile, Stopwatch } from '../src/metrics/latency.js';
-import { VoiceAgent, type AgentEvent, type AgentTool } from '../src/agent/agent.js';
+import { defineTool, VoiceAgent, type AgentEvent, type AgentTool } from '../src/agent/agent.js';
 import { LLMError } from '../src/llm/types.js';
 import { extractJson, toStrictJsonSchema } from '../src/llm/json-schema.js';
 import { LlmIntentSchema } from '../src/intent/schema.js';
@@ -120,7 +120,7 @@ describe('json schema + extraction', () => {
 
 describe('VoiceAgent', () => {
   const files = new Map<string, string>();
-  const writeFile: AgentTool = {
+  const writeFile: AgentTool = defineTool({
     name: 'write_file',
     description: 'Write a file',
     input: z.object({ path: z.string(), content: z.string() }),
@@ -130,7 +130,7 @@ describe('VoiceAgent', () => {
       files.set(i.path, i.content);
       return { ok: true, output: `wrote ${i.path}`, summary: `Wrote ${i.path}` };
     },
-  };
+  });
   let testRuns = 0;
   const runTests: AgentTool = {
     name: 'run_tests',
@@ -250,5 +250,18 @@ describe('VoiceAgent', () => {
     });
     const r = await agent.run('x');
     expect(r.report).toBe('Cancelled.');
+  });
+});
+
+import { rankFiles } from '../src/util/files.js';
+describe('rankFiles', () => {
+  const files = ['src/auth.ts', 'src/authController.ts', 'src/routes/users.ts', 'test/auth.test.ts', 'package.json', 'src/utils/format.ts', 'README.md'];
+  it('finds files from spoken names', () => {
+    expect(rankFiles(files, 'authentication')[0]!.path).toBe('src/auth.ts');
+    expect(rankFiles(files, 'auth controller')[0]!.path).toBe('src/authController.ts');
+    expect(rankFiles(files, 'package dot json')[0]!.path).toBe('package.json');
+    expect(rankFiles(files, 'users')[0]!.path).toBe('src/routes/users.ts');
+    expect(rankFiles(files, 'readme')[0]!.path).toBe('README.md');
+    expect(rankFiles(files, 'nonexistent')).toEqual([]);
   });
 });

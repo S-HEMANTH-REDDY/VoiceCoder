@@ -49,7 +49,7 @@ export interface LLMProvider {
   /** Plain completion, streamed when handlers are supplied. */
   complete(req: CompletionRequest, handlers?: StreamHandlers): Promise<CompletionResult>;
   /** Schema-constrained completion; the value is validated with the zod schema. */
-  structured<S extends z.ZodType>(req: CompletionRequest & { schema: S; schemaName: string }): Promise<StructuredResult<z.infer<S>>>;
+  structured<S extends z.ZodType>(req: CompletionRequest & { schema: S; schemaName: string }, handlers?: StreamHandlers): Promise<StructuredResult<z.infer<S>>>;
 }
 
 export class LLMError extends Error {

@@ -91,25 +91,50 @@ export class AnthropicProvider implements LLMProvider {
     }
   }
 
-  async structured<S extends z.ZodType>(req: CompletionRequest & { schema: S; schemaName: string }): Promise<StructuredResult<z.infer<S>>> {
+  async structured<S extends z.ZodType>(req: CompletionRequest & { schema: S; schemaName: string }, handlers?: StreamHandlers): Promise<StructuredResult<z.infer<S>>> {
     const started = now();
     const params = this.params(req);
+    const body = {
+      ...params,
+      output_config: { ...params.output_config, format: { type: 'json_schema' as const, schema: toStrictJsonSchema(req.schema) } },
+    };
     try {
-      const response = await this.client.beta.messages.create(
-        {
-          ...params,
-          output_config: { ...params.output_config, format: { type: 'json_schema', schema: toStrictJsonSchema(req.schema) } },
-        },
-        { signal: req.signal },
-      );
-      if (response.stop_reason === 'refusal') throw new LLMError('The model declined this request.', 'refused', false);
-      const text = response.content.map((b) => (b.type === 'text' ? b.text : '')).join('');
+      let text = '';
+      let stopReason: string | null = null;
+      let model = params.model;
+      let usage: Usage;
+      if (handlers) {
+        // Stream the JSON so the UI can show a live preview of the code being written.
+        let first = true;
+        const stream = this.client.beta.messages.stream(body, { signal: req.signal });
+        for await (const event of stream) {
+          if (event.type === 'content_block_delta' && event.delta.type === 'text_delta') {
+            if (first) {
+              first = false;
+              handlers.onFirstToken?.(now() - started);
+            }
+            text += event.delta.text;
+            handlers.onText?.(event.delta.text, text);
+          }
+        }
+        const final = await stream.finalMessage();
+        stopReason = final.stop_reason;
+        model = final.model;
+        usage = toUsage(final.usage);
+      } else {
+        const response = await this.client.beta.messages.create(body, { signal: req.signal });
+        stopReason = response.stop_reason;
+        model = response.model;
+        text = response.content.map((b) => (b.type === 'text' ? b.text : '')).join('');
+        usage = toUsage(response.usage);
+      }
+      if (stopReason === 'refusal') throw new LLMError('The model declined this request.', 'refused', false);
+      if (stopReason === 'max_tokens') throw new LLMError('The response was cut off (max tokens). Try a narrower request.', 'invalid-output', false);
       const parsed = req.schema.safeParse(extractJson(text));
       if (!parsed.success) throw new LLMError(`Model output failed ${req.schemaName} validation.`, 'invalid-output', true);
-      const usage = toUsage(response.usage);
       const latencyMs = now() - started;
-      this.opts.observer?.({ provider: this.id, model: response.model, purpose: req.purpose, latencyMs, usage, ok: true });
-      return { value: parsed.data, usage, latencyMs, model: response.model };
+      this.opts.observer?.({ provider: this.id, model, purpose: req.purpose, latencyMs, usage, ok: true });
+      return { value: parsed.data, usage, latencyMs, model };
     } catch (err) {
       throw this.fail(err, req, params.model, started);
     }

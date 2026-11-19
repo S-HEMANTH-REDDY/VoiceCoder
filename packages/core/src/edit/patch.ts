@@ -251,3 +251,36 @@ export function stripFences(text: string): string {
   const m = text.match(/^\s*```[\w+-]*\n([\s\S]*?)\n?```\s*$/);
   return (m ? m[1]! : text).replace(/^\n+/, '').replace(/\s+$/, '');
 }
+
+/**
+ * Best-effort live preview from a partially streamed EditPlan JSON: returns the
+ * decoded content of the last (possibly unterminated) "replace" string.
+ */
+export function previewFromPartialJson(partial: string): string {
+  const key = /"(?:replace|content)"\s*:\s*"/g;
+  let lastIdx = -1;
+  let m: RegExpExecArray | null;
+  while ((m = key.exec(partial))) lastIdx = m.index + m[0].length;
+  if (lastIdx < 0) return '';
+  let out = '';
+  for (let i = lastIdx; i < partial.length; i++) {
+    const ch = partial[i]!;
+    if (ch === '"') break;
+    if (ch !== '\\') {
+      out += ch;
+      continue;
+    }
+    const next = partial[++i];
+    if (next === undefined) break;
+    if (next === 'n') out += '\n';
+    else if (next === 't') out += '\t';
+    else if (next === 'r') out += '';
+    else if (next === 'u') {
+      const hex = partial.slice(i + 1, i + 5);
+      if (hex.length < 4) break;
+      out += String.fromCharCode(parseInt(hex, 16));
+      i += 4;
+    } else out += next;
+  }
+  return out;
+}
