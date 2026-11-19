@@ -72,6 +72,14 @@ const rules: Rule[] = [
     const column = m?.[2] ? parseSpokenNumber(m[2]) : null;
     return local<'navigate'>({ kind: 'navigate', target: column ? { type: 'line', line, column } : { type: 'line', line } }, tr);
   },
+  // Hindi / Telugu: "लाइन 45 पर जाओ", "లైన్ 45 కు వెళ్ళు" (digits in any script).
+  (t, tr) => {
+    const m = t.match(/^(?:लाइन|पंक्ति|line)\s*(?:नंबर\s*)?([0-9०-९]+)\s*(?:पर|तक)\s*(?:जाओ|जाइए|जाएं|चलो|ले चलो)$/) ??
+      t.match(/^(?:లైన్|లైను|line)\s*(?:నంబర్\s*)?([0-9౦-౯]+)\s*(?:కు|కి)\s*(?:వెళ్ళు|వెళ్లు|వెళ్ళండి|వెళ్లండి|పో)$/);
+    if (!m) return null;
+    const line = parseSpokenNumber(m[1]!);
+    return line && line > 0 ? local<'navigate'>({ kind: 'navigate', target: { type: 'line', line } }, tr) : null;
+  },
   (t, tr) =>
     /^(?:go|jump|move|scroll)(?: to)?(?: the)? (?:top|start|beginning)(?: of (?:the )?(?:file|document))?$/.test(t)
       ? local<'navigate'>({ kind: 'navigate', target: { type: 'top' } }, tr)
@@ -124,6 +132,10 @@ const rules: Rule[] = [
   // ── Tests ─────────────────────────────────────────────────────────────────
   (t, tr) =>
     /^(?:run|execute|rerun|re-run)(?: all)?(?: the| my)?(?: unit| integration)? (?:tests?|test suite|specs?)(?: again)?$/.test(t)
+      ? local<'test'>({ kind: 'test', action: 'run' }, tr)
+      : null,
+  (t, tr) =>
+    /^(?:run|execute)(?: the)? (?:pytest|jest|vitest|mocha|go test|cargo test|npm test|unittest)$/.test(t)
       ? local<'test'>({ kind: 'test', action: 'run' }, tr)
       : null,
 

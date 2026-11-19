@@ -24,7 +24,7 @@ export function classifyHeuristically(transcript: string, ctx: HeuristicContext)
     return { kind: 'agent', goal: transcript, confidence: 0.6, ...common };
   }
 
-  if (has(t, /\b(?:run|install|npm|pip|yarn|pnpm|cargo|make|docker)\b.*\b(?:install|start|build|dev|serve|up)\b|\binstall (?:the )?(?:package|dependency|dependencies|library|module)\b/)) {
+  if (has(t, /\b(?:run|install|npm|pip|yarn|pnpm|cargo|make|docker)\b.*\b(?:install|start|build|dev|serve|up)\b|^(?:npm |pip |yarn |pnpm )?install \S+|\binstall (?:the )?(?:package|dependency|dependencies|library|module)\b/)) {
     return { kind: 'terminal', purpose: /install/.test(t) ? 'install' : 'custom', description: transcript, confidence: 0.55, ...common };
   }
 
@@ -32,7 +32,8 @@ export function classifyHeuristically(transcript: string, ctx: HeuristicContext)
     return { kind: 'test', action: 'generate', instruction: transcript, confidence: 0.6, ...common };
   }
 
-  if (has(t, /\b(?:fix|debug|why (?:is|does)|what's wrong|error|bug|crash|exception|failing|stack ?trace)\b/)) {
+  // "add error handling" is a modification, not a debugging request.
+  if (has(t, /\b(?:fix|debug|why (?:is|does)|what's wrong|error|bug|crash|exception|failing|stack ?trace)\b/) && !/\berror handling\b/.test(t)) {
     return { kind: 'debug', instruction: transcript, confidence: 0.55, ...common };
   }
 

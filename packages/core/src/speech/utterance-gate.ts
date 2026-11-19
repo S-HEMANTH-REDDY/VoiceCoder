@@ -28,7 +28,9 @@ export class UtteranceGate {
   private readonly similarity: number;
 
   constructor(opts: UtteranceGateOptions = {}, private readonly clock: () => number = Date.now) {
-    this.windowMs = opts.windowMs ?? 2500;
+    // Long enough to catch engine restart echoes (~<1 s), short enough that a developer
+    // deliberately repeating a command ("undo" … "undo") is not swallowed.
+    this.windowMs = opts.windowMs ?? 1200;
     this.similarity = opts.similarity ?? 0.85;
   }
 

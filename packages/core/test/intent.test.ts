@@ -54,6 +54,9 @@ describe('local parser', () => {
     ['explain this error', { kind: 'explain', target: 'error' }],
     ['rename this variable to user count', { kind: 'rename', newName: 'userCount' }],
     ['rename this variable', { kind: 'rename' }],
+    ['लाइन 45 पर जाओ', { kind: 'navigate', target: { type: 'line', line: 45 } }],
+    ['लाइन ४५ पर जाओ', { kind: 'navigate', target: { type: 'line', line: 45 } }],
+    ['లైన్ 12 కు వెళ్ళు', { kind: 'navigate', target: { type: 'line', line: 12 } }],
   ])('%s', (input, expected) => {
     const intent = parseLocalIntent(input);
     expect(intent).not.toBeNull();

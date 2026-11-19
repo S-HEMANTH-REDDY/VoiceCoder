@@ -1,0 +1,419 @@
+{
+  "mode": "offline",
+  "env": {
+    "node": "v22.11.0",
+    "platform": "darwin-arm64",
+    "cpu": "Apple M3",
+    "date": "2026-11-19T09:31:14.965Z"
+  },
+  "intent": {
+    "commands": 144,
+    "accuracy": 90.3,
+    "fieldAccuracy": {
+      "checks": 82,
+      "accuracy": 100
+    },
+    "localCoverage": 56.9,
+    "localPrecision": 100,
+    "perKind": {
+      "navigate": {
+        "n": 27,
+        "accuracy": 100
+      },
+      "control": {
+        "n": 22,
+        "accuracy": 100
+      },
+      "rename": {
+        "n": 4,
+        "accuracy": 100
+      },
+      "test": {
+        "n": 9,
+        "accuracy": 100
+      },
+      "terminal": {
+        "n": 7,
+        "accuracy": 100
+      },
+      "git": {
+        "n": 11,
+        "accuracy": 100
+      },
+      "explain": {
+        "n": 8,
+        "accuracy": 87.5
+      },
+      "dictation": {
+        "n": 3,
+        "accuracy": 100
+      },
+      "generate": {
+        "n": 16,
+        "accuracy": 100
+      },
+      "modify": {
+        "n": 20,
+        "accuracy": 40
+      },
+      "refactor": {
+        "n": 6,
+        "accuracy": 83.3
+      },
+      "debug": {
+        "n": 6,
+        "accuracy": 100
+      },
+      "agent": {
+        "n": 5,
+        "accuracy": 100
+      }
+    },
+    "byTag": {
+      "navigation": {
+        "n": 27,
+        "accuracy": 100
+      },
+      "control": {
+        "n": 22,
+        "accuracy": 100
+      },
+      "asr-noise": {
+        "n": 7,
+        "accuracy": 57.1
+      },
+      "follow-up": {
+        "n": 5,
+        "accuracy": 80
+      },
+      "multilingual": {
+        "n": 4,
+        "accuracy": 50
+      },
+      "model": {
+        "n": 62,
+        "accuracy": 77.4
+      }
+    },
+    "latencyMs": {
+      "local": {
+        "n": 82,
+        "p50": 0.012,
+        "p95": 0.162,
+        "max": 1.915
+      },
+      "heuristic": {
+        "n": 62,
+        "p50": 0.014,
+        "p95": 0.449,
+        "max": 1.704
+      }
+    },
+    "tokens": {
+      "input": 0,
+      "output": 0,
+      "perModelCall": null
+    },
+    "confusion": {
+      "navigate": {
+        "navigate": 27
+      },
+      "control": {
+        "control": 22
+      },
+      "rename": {
+        "rename": 4
+      },
+      "test": {
+        "test": 9
+      },
+      "terminal": {
+        "terminal": 7
+      },
+      "git": {
+        "git": 11
+      },
+      "explain": {
+        "explain": 7,
+        "generate": 1
+      },
+      "dictation": {
+        "dictation": 3
+      },
+      "generate": {
+        "generate": 16
+      },
+      "modify": {
+        "generate": 12,
+        "modify": 8
+      },
+      "refactor": {
+        "refactor": 5,
+        "generate": 1
+      },
+      "debug": {
+        "debug": 6
+      },
+      "agent": {
+        "agent": 5
+      }
+    },
+    "failures": [
+      {
+        "text": "add JWT authentication",
+        "expected": "modify",
+        "got": "generate",
+        "source": "heuristic"
+      },
+      {
+        "text": "add input validation",
+        "expected": "modify",
+        "got": "generate",
+        "source": "heuristic"
+      },
+      {
+        "text": "use a map instead of an object here",
+        "expected": "modify",
+        "got": "generate",
+        "source": "heuristic"
+      },
+      {
+        "text": "change the return type to a promise",
+        "expected": "modify",
+        "got": "generate",
+        "source": "heuristic"
+      },
+      {
+        "text": "handle the empty list case",
+        "expected": "modify",
+        "got": "generate",
+        "source": "heuristic"
+      },
+      {
+        "text": "add type hints",
+        "expected": "modify",
+        "got": "generate",
+        "source": "heuristic"
+      },
+      {
+        "text": "make the timeout configurable",
+        "expected": "modify",
+        "got": "generate",
+        "source": "heuristic"
+      },
+      {
+        "text": "add a retry with exponential backoff",
+        "expected": "modify",
+        "got": "generate",
+        "source": "heuristic"
+      },
+      {
+        "text": "remove the duplicated logic",
+        "expected": "refactor",
+        "got": "generate",
+        "source": "heuristic"
+      },
+      {
+        "text": "add jay w t authentication",
+        "expected": "modify",
+        "got": "generate",
+        "source": "heuristic"
+      },
+      {
+        "text": "parse the jason response",
+        "expected": "modify",
+        "got": "generate",
+        "source": "heuristic"
+      },
+      {
+        "text": "switch the database to post gress",
+        "expected": "modify",
+        "got": "generate",
+        "source": "heuristic"
+      },
+      {
+        "text": "इस फंक्शन में एरर हैंडलिंग जोड़ो",
+        "expected": "modify",
+        "got": "generate",
+        "source": "heuristic"
+      },
+      {
+        "text": "ఈ ఫంక్షన్ ఏమి చేస్తుందో వివరించు",
+        "expected": "explain",
+        "got": "generate",
+        "source": "heuristic"
+      }
+    ]
+  },
+  "duplicates": {
+    "scenarios": 500,
+    "legacy": {
+      "utterances": 600,
+      "executions": 800,
+      "duplicates": 200,
+      "missed": 0,
+      "duplicateRate": 33.3,
+      "byScenario": {
+        "fast-final": {
+          "dup": 0,
+          "n": 100
+        },
+        "late-final": {
+          "dup": 100,
+          "n": 100
+        },
+        "stop-mid-utterance": {
+          "dup": 100,
+          "n": 100
+        },
+        "session-restart": {
+          "dup": 0,
+          "n": 100
+        },
+        "two-utterances": {
+          "dup": 0,
+          "n": 100
+        }
+      }
+    },
+    "current": {
+      "utterances": 600,
+      "executions": 600,
+      "duplicates": 0,
+      "missed": 0,
+      "duplicateRate": 0,
+      "byScenario": {
+        "fast-final": {
+          "dup": 0,
+          "n": 100
+        },
+        "late-final": {
+          "dup": 0,
+          "n": 100
+        },
+        "stop-mid-utterance": {
+          "dup": 0,
+          "n": 100
+        },
+        "session-restart": {
+          "dup": 0,
+          "n": 100
+        },
+        "two-utterances": {
+          "dup": 0,
+          "n": 100
+        }
+      }
+    }
+  },
+  "patches": {
+    "cases": 10,
+    "correct": 10,
+    "rows": [
+      {
+        "name": "exact anchor",
+        "ok": true,
+        "outcome": "applied"
+      },
+      {
+        "name": "model re-indented anchor",
+        "ok": true,
+        "outcome": "applied"
+      },
+      {
+        "name": "trailing whitespace in file",
+        "ok": true,
+        "outcome": "applied"
+      },
+      {
+        "name": "CRLF file",
+        "ok": true,
+        "outcome": "applied"
+      },
+      {
+        "name": "import + body in one plan",
+        "ok": true,
+        "outcome": "applied"
+      },
+      {
+        "name": "insert at cursor",
+        "ok": true,
+        "outcome": "applied"
+      },
+      {
+        "name": "ambiguous anchor (must refuse)",
+        "ok": true,
+        "outcome": "refused: The text to change appears 2 times; the edit is ambiguous."
+      },
+      {
+        "name": "stale anchor (must refuse)",
+        "ok": true,
+        "outcome": "refused: Could not find the code the model wanted to change. The file"
+      },
+      {
+        "name": "overlapping edits (must refuse)",
+        "ok": true,
+        "outcome": "refused: Two proposed edits overlap."
+      },
+      {
+        "name": "empty plan (must refuse)",
+        "ok": true,
+        "outcome": "refused: The model proposed no changes."
+      }
+    ]
+  },
+  "agentRecovery": {
+    "cases": 8,
+    "handled": 8,
+    "rows": [
+      {
+        "name": "transient model errors (429, 5xx) then success",
+        "expected": "complete",
+        "result": "complete",
+        "ok": true
+      },
+      {
+        "name": "failing test → fix → passing test",
+        "expected": "complete",
+        "result": "complete",
+        "ok": true
+      },
+      {
+        "name": "invalid tool arguments → corrected",
+        "expected": "complete",
+        "result": "complete",
+        "ok": true
+      },
+      {
+        "name": "malformed argsJson → corrected",
+        "expected": "complete",
+        "result": "complete",
+        "ok": true
+      },
+      {
+        "name": "tool timeout → alternative action",
+        "expected": "complete",
+        "result": "complete",
+        "ok": true
+      },
+      {
+        "name": "tool exception → alternative action",
+        "expected": "complete",
+        "result": "complete",
+        "ok": true
+      },
+      {
+        "name": "non-retryable auth error → clean failure",
+        "expected": "fail safely",
+        "result": "failed",
+        "ok": true
+      },
+      {
+        "name": "runaway loop → step bound",
+        "expected": "fail safely",
+        "result": "failed",
+        "ok": true
+      }
+    ]
+  }
+}

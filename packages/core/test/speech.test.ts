@@ -41,11 +41,19 @@ describe('UtteranceGate', () => {
   it('suppresses exact and near duplicates within the window', () => {
     let t = 0;
     const gate = new UtteranceGate({ windowMs: 2000 }, () => t);
+    // (explicit window here; the default is 1200 ms)
     expect(gate.offer('Go to line 45').accept).toBe(true);
     expect(gate.offer('go to line 45.').reason).toBe('duplicate');
     expect(gate.offer('go to line').reason).toBe('subsumed');
     t = 3000;
     expect(gate.offer('go to line 45').accept).toBe(true);
+  });
+  it('lets a deliberate repeat through after the default window', () => {
+    let t = 0;
+    const gate = new UtteranceGate({}, () => t);
+    expect(gate.offer('undo').accept).toBe(true);
+    t = 1500;
+    expect(gate.offer('undo').accept).toBe(true);
   });
   it('allows different commands', () => {
     const gate = new UtteranceGate();
