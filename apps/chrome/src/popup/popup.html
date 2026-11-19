@@ -8,43 +8,40 @@
 </head>
 <body>
   <div class="container">
-    <!-- Header -->
     <div class="header">
       <div class="logo">
         <div class="logo-dot" id="statusDot"></div>
         <span class="logo-text">VoiceCoder</span>
       </div>
-      <button class="settings-btn" id="settingsBtn" title="Settings">⚙</button>
+      <button class="settings-btn" id="settingsBtn" title="Settings" aria-label="Settings">⚙</button>
     </div>
 
-    <!-- No API Key Warning -->
     <div class="warning" id="apiKeyWarning" style="display:none">
-      <span>⚠ Add your OpenAI key in</span>
+      <span>Add an API key in</span>
       <button class="link-btn" id="openSettingsLink">Settings</button>
+      <span>to generate code. Undo, dictation and “go to line” work without one.</span>
     </div>
 
-    <!-- Main Toggle -->
     <div class="toggle-section">
-      <button class="toggle-btn" id="toggleBtn" disabled>
-        <span class="toggle-icon" id="toggleIcon">🎙</span>
-        <span class="toggle-label" id="toggleLabel">Start Listening</span>
+      <button class="toggle-btn" id="toggleBtn">
+        <span class="toggle-label" id="toggleLabel">Start listening</span>
         <kbd class="shortcut">⌥ Space</kbd>
       </button>
     </div>
 
-    <!-- Language Selector -->
     <div class="lang-section">
-      <label class="section-label">Language</label>
-      <div class="lang-grid" id="langGrid">
-        <!-- Populated by JS -->
-      </div>
+      <label class="section-label" for="speechLang">Speech language</label>
+      <select id="speechLang">
+        <option value="en-US">English (US)</option>
+        <option value="en-GB">English (UK)</option>
+        <option value="en-IN">English (India)</option>
+        <option value="hi-IN">हिन्दी · Hindi</option>
+        <option value="te-IN">తెలుగు · Telugu</option>
+      </select>
     </div>
 
-    <!-- Status -->
-    <div class="status-bar" id="statusBar">
-      Ready — focus any code editor and press ⌥ Space
-    </div>
+    <div class="status-bar" id="statusBar">Click into a code editor, then press ⌥ Space.</div>
   </div>
-  <script src="popup.js" type="module"></script>
+  <script src="popup.js"></script>
 </body>
 </html>

@@ -1,75 +1,31 @@
 #!/usr/bin/env node
-import { cp, mkdir, copyFile, rm } from 'fs/promises';
-import { join, dirname } from 'path';
-import { fileURLToPath } from 'url';
-import { build as esbuild } from 'esbuild';
+// Bundles the MV3 extension into dist/ (load unpacked from there).
+import { build } from 'esbuild';
+import { cp, copyFile, mkdir, rm } from 'node:fs/promises';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const __dir = dirname(fileURLToPath(import.meta.url));
-const ROOT = join(__dir, '..');
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = join(ROOT, 'dist');
+const common = { bundle: true, platform: 'browser', target: 'chrome111', logLevel: 'info', legalComments: 'none', minify: process.argv.includes('--production') };
 
-async function build() {
-  console.log('Building VoiceCoder…');
-
-  await rm(DIST, { recursive: true, force: true });
-  await mkdir(DIST, { recursive: true });
-
-  // Copy manifest and icons
-  await copyFile(join(ROOT, 'manifest.json'), join(DIST, 'manifest.json'));
-  await cp(join(ROOT, 'icons'), join(DIST, 'icons'), { recursive: true });
-
-  // Copy popup and settings as-is (they run as extension pages, not content scripts)
-  await cp(join(ROOT, 'src', 'popup'), join(DIST, 'src', 'popup'), { recursive: true });
-  await cp(join(ROOT, 'src', 'settings'), join(DIST, 'src', 'settings'), { recursive: true });
-  await mkdir(join(DIST, 'src', 'content'), { recursive: true });
-  await copyFile(join(ROOT, 'src', 'content', 'content.css'), join(DIST, 'src', 'content', 'content.css'));
-
-  // Bundle the content script — Chrome doesn't support ES module relative
-  // imports in content scripts, so esbuild inlines everything into one IIFE.
-  await esbuild({
-    entryPoints: [join(ROOT, 'src', 'content', 'content.js')],
-    bundle: true,
-    outfile: join(DIST, 'src', 'content', 'content.js'),
-    format: 'iife',
-    platform: 'browser',
-    target: 'chrome120',
-    logLevel: 'info',
-  });
-
-  // Bundle the service worker (already works as ES module, but bundle for consistency)
-  await mkdir(join(DIST, 'src', 'background'), { recursive: true });
-  await esbuild({
-    entryPoints: [join(ROOT, 'src', 'background', 'service-worker.js')],
-    bundle: true,
-    outfile: join(DIST, 'src', 'background', 'service-worker.js'),
-    format: 'esm',
-    platform: 'browser',
-    target: 'chrome120',
-    logLevel: 'info',
-  });
-
-  // Popup and settings scripts need bundling too
-  for (const name of ['popup', 'settings']) {
-    await esbuild({
-      entryPoints: [join(ROOT, 'src', name, `${name}.js`)],
-      bundle: true,
-      outfile: join(DIST, 'src', name, `${name}.js`),
-      format: 'iife',
-      platform: 'browser',
-      target: 'chrome120',
-      logLevel: 'info',
-    });
-  }
-
-  console.log('✓ Built to dist/');
-  console.log('\nTo load in Chrome:');
-  console.log('  1. Open chrome://extensions');
-  console.log('  2. Enable "Developer mode"');
-  console.log('  3. Click "Load unpacked"');
-  console.log('  4. Select the dist/ folder');
+await rm(DIST, { recursive: true, force: true });
+await mkdir(DIST, { recursive: true });
+await copyFile(join(ROOT, 'manifest.json'), join(DIST, 'manifest.json'));
+await cp(join(ROOT, 'icons'), join(DIST, 'icons'), { recursive: true });
+for (const page of ['popup', 'settings']) {
+  await mkdir(join(DIST, page), { recursive: true });
+  await copyFile(join(ROOT, 'src', page, `${page}.html`), join(DIST, page, `${page}.html`));
+  await copyFile(join(ROOT, 'src', page, `${page}.css`), join(DIST, page, `${page}.css`));
 }
 
-build().catch((e) => {
-  console.error('Build failed:', e);
-  process.exit(1);
-});
+await Promise.all([
+  // Service worker is an ES module (manifest "type": "module").
+  build({ ...common, entryPoints: [join(ROOT, 'src/background/service-worker.ts')], outfile: join(DIST, 'service-worker.js'), format: 'esm' }),
+  // Content scripts cannot use ES module imports: bundle as IIFE.
+  build({ ...common, entryPoints: [join(ROOT, 'src/content/content.ts')], outfile: join(DIST, 'content.js'), format: 'iife' }),
+  build({ ...common, entryPoints: [join(ROOT, 'src/content/page-bridge.ts')], outfile: join(DIST, 'page-bridge.js'), format: 'iife' }),
+  build({ ...common, entryPoints: [join(ROOT, 'src/popup/popup.ts')], outfile: join(DIST, 'popup/popup.js'), format: 'iife' }),
+  build({ ...common, entryPoints: [join(ROOT, 'src/settings/settings.ts')], outfile: join(DIST, 'settings/settings.js'), format: 'iife' }),
+]);
+console.log('✓ Built to dist/ — load it at chrome://extensions (Developer mode → Load unpacked).');

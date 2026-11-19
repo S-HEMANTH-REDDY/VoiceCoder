@@ -3,19 +3,9 @@
 // range edit, which (a) keeps diffs reviewable, (b) cuts output tokens, and (c) lets us
 // detect when the document changed underneath an in-flight request.
 
-import { z } from 'zod';
+import type { EditBlock } from './schema.js';
 
-export const EditBlockSchema = z.object({
-  search: z.string().describe('Exact existing text to replace, copied verbatim from the file (include enough lines to be unique). Empty string only when inserting at the cursor.'),
-  replace: z.string().describe('The new text.'),
-});
-export type EditBlock = z.infer<typeof EditBlockSchema>;
-
-export const EditPlanSchema = z.object({
-  summary: z.string().describe('One short sentence describing the change, for the UI.'),
-  edits: z.array(EditBlockSchema),
-});
-export type EditPlan = z.infer<typeof EditPlanSchema>;
+export type { EditBlock, EditPlan } from './schema.js';
 
 /** A replacement expressed as offsets into the ORIGINAL text. */
 export interface TextChange {

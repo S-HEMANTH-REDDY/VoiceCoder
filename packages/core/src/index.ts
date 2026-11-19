@@ -15,6 +15,7 @@ export * from './llm/registry.js';
 export * from './prompts/prompts.js';
 export * from './context/context.js';
 export * from './edit/patch.js';
+export * from './edit/schema.js';
 export * from './edit/transactions.js';
 export * from './memory/session-memory.js';
 export * from './safety/command-policy.js';

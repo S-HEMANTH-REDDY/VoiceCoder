@@ -85,6 +85,12 @@ export class BrowserSpeechBridge implements SpeechSource {
     this.broadcast({ type: 'config', lang: this.lang, mode: this.mode });
   }
 
+  /** Starts the loopback server without opening a browser; returns the page URL. */
+  async listen(): Promise<string> {
+    await this.ensureServer();
+    return this.pageUrl();
+  }
+
   pageUrl(): string {
     return `http://127.0.0.1:${this.port}/${this.token}/mic`;
   }

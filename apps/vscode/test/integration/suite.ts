@@ -132,6 +132,42 @@ export async function run(): Promise<void> {
       console.log(`\n    local command latency (n=${sorted.length}): p50=${p(50)?.toFixed(1)}ms p95=${p(95)?.toFixed(1)}ms max=${sorted.at(-1)?.toFixed(1)}ms`);
     });
 
+    it('secures the browser microphone bridge (token, Host, Origin, schema)', async () => {
+      const { BrowserSpeechBridge } = await import('../../src/speech/browser-bridge.js');
+      const bridge = new BrowserSpeechBridge(async () => '<html></html>', async () => '', { lang: 'en-US', mode: 'continuous' });
+      const events: unknown[] = [];
+      bridge.onEvent((e) => events.push(e));
+      try {
+        const url = new URL(await bridge.listen());
+        assert.equal(url.hostname, '127.0.0.1');
+        const base = `${url.origin}${url.pathname.replace(/\/mic$/, '')}`;
+        const http = await import('node:http');
+        const req = (path: string, opts: { method?: string; headers?: Record<string, string>; body?: string } = {}) =>
+          new Promise<number>((resolve, reject) => {
+            const r = http.request(`${url.origin}${path}`, { method: opts.method ?? 'GET', headers: opts.headers }, (res) => {
+              res.resume();
+              resolve(res.statusCode ?? 0);
+            });
+            r.on('error', reject);
+            if (opts.body) r.write(opts.body);
+            r.end();
+          });
+        const tokenPath = new URL(base).pathname;
+        assert.equal(await req(`${tokenPath}/mic`), 200, 'valid token serves the page');
+        assert.equal(await req('/wrongtoken/mic'), 404, 'wrong token is rejected');
+        assert.equal(await req(`${tokenPath}/mic`, { headers: { Host: `evil.example:${url.port}` } }), 421, 'DNS-rebinding Host is rejected');
+        const final = JSON.stringify({ type: 'final', text: 'go to line 3' });
+        assert.equal(await req(`${tokenPath}/event`, { method: 'POST', body: final, headers: { 'Content-Type': 'application/json' } }), 403, 'POST without page origin is rejected');
+        assert.equal(await req(`${tokenPath}/event`, { method: 'POST', body: final, headers: { Origin: 'https://evil.example' } }), 403, 'foreign origin is rejected');
+        assert.equal(await req(`${tokenPath}/event`, { method: 'POST', body: '{"type":"exec","cmd":"rm"}', headers: { Origin: url.origin } }), 400, 'unknown event shape is rejected');
+        assert.equal(await req(`${tokenPath}/event`, { method: 'POST', body: final, headers: { Origin: url.origin } }), 204);
+        await sleep(20);
+        assert.deepEqual(events, [{ type: 'final', text: 'go to line 3', promoted: false }]);
+      } finally {
+        bridge.dispose();
+      }
+    });
+
     it('registers its commands', async () => {
       const cmds = await vscode.commands.getCommands(true);
       for (const c of ['voicecoder.toggleListening', 'voicecoder.typeCommand', 'voicecoder.accept', 'voicecoder.reject', 'voicecoder.undo', 'voicecoder.setApiKey']) {
